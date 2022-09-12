@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const httpStatus = require("http-status");
 
 const ApiError = require("../utils/ApiError");
-const config = require("../utils/config");
+const config = require("../config");
 const logger = require("../utils/logger");
 
 const errorConverter = (err, req, res, next) => {
@@ -22,21 +22,19 @@ const errorConverter = (err, req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
-  if (config.env === "production") {
-    statusCode = httpStatus.INTERNAL_SERVER_ERROR;
-    message;
-  }
+
   const response = {
-    sucess: false,
+    statusCode,
+    error: httpStatus[statusCode],
     message,
     ...(config.env === "development" && { stack: err.stack }),
   };
 
   res.locals.errorMessage = err.message;
 
-  logger.error(err);
+  logger.error(err.message);
 
-  res.status(statusCode).send(response);
+  res.status(statusCode).json(response);
 };
 
 module.exports = {

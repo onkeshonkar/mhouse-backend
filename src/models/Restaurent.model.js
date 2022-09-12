@@ -16,6 +16,7 @@ const restaurentSchema = mongoose.Schema(
     owner: {
       type: ObjectId,
       ref: "User",
+      required: true,
     },
     payrollId: {
       type: Number,

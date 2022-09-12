@@ -3,19 +3,22 @@ const compression = require("compression");
 const helmet = require("helmet");
 const cors = require("cors");
 const mongoSanitize = require("express-mongo-sanitize");
-const pinoHttp = require("pino-http");
-const logger = require("./utils/logger");
+const httpStatus = require("http-status");
+// const pinoHttp = require("pino-http");
 
-const { errorConverter, errorHandler } = require("./middlewares/error");
+const logger = require("./utils/logger");
+const ApiError = require("./utils/ApiError");
+
+const { errorConverter, errorHandler } = require("./middlewares/errors");
 const routes = require("./routes");
 
 const app = express();
 
-app.use(
-  pinoHttp({
-    logger: logger,
-  })
-);
+// app.use(
+//   pinoHttp({
+//     logger: logger,
+//   })
+// );
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
@@ -27,6 +30,14 @@ app.use(cors());
 app.use(compression());
 
 app.use("/api/v1", routes);
+
+app.use("/ping", (req, res, next) => {
+  res.send("pong");
+});
+
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
+});
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

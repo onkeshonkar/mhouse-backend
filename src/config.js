@@ -9,7 +9,7 @@ const config = {
     secret: process.env.JWT_SECRET || "itsrandombutstillnotrandom",
   },
 
-  otp_expiry: process.env.OTP_EXPIRY_MINUTES || 10,
+  otp_expiry: process.env.OTP_EXPIRY_MINUTES || 15,
 
   email: {
     smtp: {

@@ -13,7 +13,6 @@ module.exports = pino(
         "password",
         "*.password",
         "*.body.password",
-        "event.data.password",
         "req.headers['authorization']",
       ],
       censor: "**SENSETIVE INFORMATION**",

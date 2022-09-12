@@ -27,7 +27,8 @@ const rolesSchema = mongoose.Schema(
         CATERING_ORDERS: ["view"],
         OPERATIONS: [],
         MENU: ["view"],
-        NEWS_FEED: ["view "],
+        NEWS_FEED: ["view"], // only view and add
+        SETTINGS: ["view"], // only view and edit
       },
     },
   },
@@ -66,9 +67,10 @@ const userSchema = mongoose.Schema(
     },
     ip: String,
     mac: String,
-    type: {
-      type: String,
-      enum: ["owner"],
+    pin: String,
+    isOwner: {
+      type: Boolean,
+      default: false,
     },
     roles: rolesSchema,
     branch: {

@@ -6,11 +6,10 @@ const tokenSchema = mongoose.Schema(
   {
     token: {
       type: String,
-      required: true,
     },
     type: {
       type: String,
-      enum: ["RESET_PASSWORD", "INVITATION_LINK"],
+      enum: ["RESET_PASSWORD", "SIGNUP_INVITATION"],
       required: true,
     },
     usedAt: {
