@@ -14,7 +14,7 @@ const resetPasswordController = require("./controllers/resetPassword.controller"
 const createPasswordController = require("./controllers/createPassword.controller");
 const verifyOtpController = require("./controllers/verifyOtp.controller");
 
-router.post("/register", registerController);
+router.post("/signup", registerController);
 router.post("/login", loginController);
 router.post("/reset-password/generate", resetpasswordGeneratorController);
 router.post("/reset-password/info", resetPasswordInfoController);

@@ -5,6 +5,7 @@ const dayjs = require("dayjs");
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
+const customValidator = require("../../../utils/customValidator");
 
 const Otp = require("../../../models/Otp.model");
 const User = require("../../../models/User.model");
@@ -15,7 +16,7 @@ module.exports = async (req, res, next) => {
   const schema = {
     body: Joi.object({
       otp: Joi.string().trim().required(),
-      token: Joi.string().trim().required(),
+      token: Joi.string().custom(customValidator.objectId).required(),
     }),
   };
 
@@ -28,8 +29,9 @@ module.exports = async (req, res, next) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Invalid otp");
   }
 
-  const otpExpired = dayjs().isBefore(dayjs(otpDoc.expiry));
-  if (otpExpired) {
+  const otpExpired = dayjs().isAfter(dayjs(otpDoc.expiry));
+
+  if (otpExpired || otpDoc.usedAt) {
     throw new ApiError(httpStatus.BAD_REQUEST, "OTP expired");
   }
 

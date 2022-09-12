@@ -47,7 +47,7 @@ module.exports = async (req, res, next) => {
       email,
       password: hashedPassword,
       phoneNumber,
-      isOwner: true,
+      type: "OWNER",
     });
 
     const restaurent = await Restaurent.create({

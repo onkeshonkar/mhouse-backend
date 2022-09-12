@@ -68,9 +68,9 @@ const userSchema = mongoose.Schema(
     ip: String,
     mac: String,
     pin: String,
-    isOwner: {
-      type: Boolean,
-      default: false,
+    type: {
+      type: String,
+      enum: ["OWNER", "MANAGER"],
     },
     roles: rolesSchema,
     branch: {

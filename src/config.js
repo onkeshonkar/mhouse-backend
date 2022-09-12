@@ -3,7 +3,10 @@ require("dotenv").config();
 const config = {
   env: process.env.NODE_ENV || "production",
   port: process.env.PORT || 4000,
-  db: process.env.MONGODB_URL,
+  db:
+    process.env.NODE_ENV === "production"
+      ? process.env.MONGODB_URL
+      : "mongodb+srv://onkesh_onkar:Onkesh1998@cluster0.s8dke.mongodb.net/foodlert-dev?retryWrites=true&w=majority",
 
   jwt: {
     secret: process.env.JWT_SECRET || "itsrandombutstillnotrandom",
