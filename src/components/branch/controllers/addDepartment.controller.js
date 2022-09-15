@@ -24,22 +24,23 @@ module.exports = async (req, res, next) => {
 
   const { name } = req.body;
 
-  if (
-    req.user.type === "OWNER" ||
-    (req.user.type === "MANAGER" && req.user.branch.id === branchId)
-  ) {
-    const _branch = await Branch.findByIdAndUpdate(
-      branchId,
-      {
-        $addToSet: { departments: name },
-      },
-      { new: true }
-    ).select({ departments: 1 });
+  const _branch = await Branch.findByIdAndUpdate(
+    branchId,
+    {
+      $addToSet: { departments: name },
+    },
+    { new: true }
+  ).select({ departments: 1 });
 
-    return res
-      .status(httpStatus.CREATED)
-      .json({ departments: _branch.departments });
-  }
+  return res
+    .status(httpStatus.CREATED)
+    .json({ departments: _branch.departments });
 
-  next(new ApiError(httpStatus.FORBIDDEN));
+  // if (
+  //   req.user.type === "OWNER" ||
+  //   (req.user.type === "MANAGER" && req.user.branch.id === branchId)
+  // ) {
+  // }
+
+  // next(new ApiError(httpStatus.FORBIDDEN));
 };

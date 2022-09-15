@@ -32,21 +32,14 @@ module.exports = async (req, res, next) => {
 
   const { branchId } = req.params;
 
-  if (
-    req.user.type === "OWNER" ||
-    (req.user.type === "MANAGER" && req.user.branch.id === branchId)
-  ) {
-    const _branch = await Branch.findByIdAndUpdate(
-      branchId,
-      {
-        notifications,
-      },
-      { new: true }
-    ).select({
-      notifications: 1,
-    });
-    return res.json({ notifications: _branch.notifications });
-  }
-
-  next(new ApiError(httpStatus.FORBIDDEN));
+  const _branch = await Branch.findByIdAndUpdate(
+    branchId,
+    {
+      notifications,
+    },
+    { new: true }
+  ).select({
+    notifications: 1,
+  });
+  return res.json({ notifications: _branch.notifications });
 };

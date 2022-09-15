@@ -24,20 +24,13 @@ module.exports = async (req, res, next) => {
 
   const { name } = req.query;
 
-  if (
-    req.user.type === "OWNER" ||
-    (req.user.type === "MANAGER" && req.user.branch.id === branchId)
-  ) {
-    const _branch = await Branch.findByIdAndUpdate(
-      branchId,
-      {
-        $pull: { roles: name },
-      },
-      { new: true }
-    ).select({ roles: 1 });
+  const _branch = await Branch.findByIdAndUpdate(
+    branchId,
+    {
+      $pull: { roles: name },
+    },
+    { new: true }
+  ).select({ roles: 1 });
 
-    return res.status(httpStatus.CREATED).json({ roles: _branch.roles });
-  }
-
-  next(new ApiError(httpStatus.FORBIDDEN));
+  return res.status(httpStatus.CREATED).json({ roles: _branch.roles });
 };

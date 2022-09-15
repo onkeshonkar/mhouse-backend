@@ -2,7 +2,6 @@ const httpStatus = require("http-status");
 const Joi = require("joi");
 require("express-async-errors");
 
-const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 
@@ -24,22 +23,13 @@ module.exports = async (req, res, next) => {
 
   const { name } = req.query;
 
-  if (
-    req.user.type === "OWNER" ||
-    (req.user.type === "MANAGER" && req.user.branch.id === branchId)
-  ) {
-    const _branch = await Branch.findByIdAndUpdate(
-      branchId,
-      {
-        $pull: { jobTitles: name },
-      },
-      { new: true }
-    ).select({ jobTitles: 1 });
+  const _branch = await Branch.findByIdAndUpdate(
+    branchId,
+    {
+      $pull: { jobTitles: name },
+    },
+    { new: true }
+  ).select({ jobTitles: 1 });
 
-    return res
-      .status(httpStatus.CREATED)
-      .json({ jobTitles: _branch.jobTitles });
-  }
-
-  next(new ApiError(httpStatus.FORBIDDEN));
+  return res.status(httpStatus.CREATED).json({ jobTitles: _branch.jobTitles });
 };

@@ -30,31 +30,24 @@ module.exports = async (req, res, next) => {
 
   const { branchId } = req.params;
 
-  if (
-    req.user.type === "OWNER" ||
-    (req.user.type === "MANAGER" && req.user.branch.id === branchId)
-  ) {
-    const _branch = await Branch.findByIdAndUpdate(
-      branchId,
-      {
-        timeFormat,
-        timeZone,
-        payrollType,
-        cashRegister,
-        safeDeposit,
-        closingAmount,
-      },
-      { new: true }
-    ).select({
-      manager: 0,
-      departments: 0,
-      jobTitles: 0,
-      roles: 0,
-      notification: 0,
-    });
+  const _branch = await Branch.findByIdAndUpdate(
+    branchId,
+    {
+      timeFormat,
+      timeZone,
+      payrollType,
+      cashRegister,
+      safeDeposit,
+      closingAmount,
+    },
+    { new: true }
+  ).select({
+    manager: 0,
+    departments: 0,
+    jobTitles: 0,
+    roles: 0,
+    notification: 0,
+  });
 
-    return res.json({ branch: _branch });
-  }
-
-  next(new ApiError(httpStatus.FORBIDDEN));
+  return res.json({ branch: _branch });
 };
