@@ -30,6 +30,7 @@ const auth = async (req, res, next) => {
   }
 
   req.user = user;
+  req.user.restaurent = user.branch.restaurent;
 
   next();
 };
