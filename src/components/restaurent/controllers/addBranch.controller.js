@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
 
     body: Joi.object({
       name: Joi.string().trim().required(),
-      manager: Joi.string().custom(objectId).required(),
+      manager: Joi.string().custom(customValidators.objectId).required(),
       address: Joi.string().trim().required(),
     }),
   };
@@ -27,8 +27,11 @@ module.exports = async (req, res, next) => {
 
   const { name, manager, address } = req.body;
 
-  if (rId !== req.user.branch.restaurent.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN);
+  if (rId !== req.user.restaurent.toString()) {
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      `You are not allowed to access ${rId} restaurent`
+    );
   }
 
   const branch = await Branch.create({

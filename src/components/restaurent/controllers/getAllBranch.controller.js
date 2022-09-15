@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
 
   const { rId } = req.params;
 
-  if (rId !== req.user.branch.restaurent.toString()) {
+  if (rId !== req.user.restaurent.toString()) {
     throw new ApiError(httpStatus.FORBIDDEN);
   }
 

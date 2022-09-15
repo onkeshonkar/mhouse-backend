@@ -1,16 +1,33 @@
 const express = require("express");
 
-const authRoute = require("./components/auth/auth.routes");
-const branchRoute = require("./components/branch/branch.routes");
-const restaurentRoute = require("./components/restaurent/restaurent.routes");
+const authRoutes = require("./components/auth/auth.routes");
+const branchRoutes = require("./components/branch/branch.routes");
+const restaurentRoutes = require("./components/restaurent/restaurent.routes");
+const payrollGroupRoutes = require("./components/payrollGroup/payrollGroup.routes");
 
 const isAuth = require("./middlewares/isAuth");
-const isSameRestaurent = require("./middlewares/isSameRestaurent");
+const isInSameRestaurent = require("./middlewares/isInSameRestaurent");
+const isOwnerOrManager = require("./middlewares/isOwnerOrManager");
 
 const router = express.Router();
 
-router.use("/user/auth", authRoute);
-router.use("/branches/:branchId", isAuth, isSameRestaurent, branchRoute);
-router.use("/restaurents/:rId", isAuth, restaurentRoute);
+router.use("/user/auth", authRoutes);
+router.use(
+  "/branches/:branchId",
+  isAuth,
+  isInSameRestaurent,
+  isOwnerOrManager,
+  branchRoutes
+);
+
+router.use("/restaurents/:rId", isAuth, restaurentRoutes);
+
+router.use(
+  "/branches/:branchId/payroll-groups",
+  isAuth,
+  isInSameRestaurent,
+  isOwnerOrManager,
+  payrollGroupRoutes
+);
 
 module.exports = router;

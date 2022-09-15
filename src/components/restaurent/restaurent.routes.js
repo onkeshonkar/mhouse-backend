@@ -6,14 +6,14 @@ const getAllBranchController = require("./controllers/getAllBranch.controller");
 const updateBranchController = require("./controllers/updateBranch.controller");
 const updateBussinessDataController = require("./controllers/updateBussinessData.controller");
 
-const isSameResturent = require("../../middlewares/isSameRestaurent");
+const isInSameResturent = require("../../middlewares/isInSameRestaurent");
 
 const router = express.Router({ mergeParams: true });
 
 router.get("/branches", getAllBranchController);
 router.post("/branches", addBranchController);
-router.put("/branches/:branchId", isSameResturent, updateBranchController);
-router.delete("/branches/:branchId", isSameResturent, deleteBranchController);
+router.patch("/branches/:branchId", isInSameResturent, updateBranchController);
+router.delete("/branches/:branchId", isInSameResturent, deleteBranchController);
 
 router.get("/businnes-details", updateBussinessDataController);
 

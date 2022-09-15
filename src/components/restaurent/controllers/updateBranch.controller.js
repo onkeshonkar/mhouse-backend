@@ -16,9 +16,9 @@ module.exports = async (req, res, next) => {
     }),
 
     body: Joi.object({
-      name: Joi.string().trim().required(),
-      manager: Joi.string().custom(objectId).required(),
-      address: Joi.string().trim().required(),
+      name: Joi.string().trim(),
+      manager: Joi.string().custom(customValidators.objectId),
+      address: Joi.string().trim(),
     }),
   };
 
@@ -34,5 +34,5 @@ module.exports = async (req, res, next) => {
     address,
   });
 
-  res.status().send({ branch });
+  res.send({ branch });
 };

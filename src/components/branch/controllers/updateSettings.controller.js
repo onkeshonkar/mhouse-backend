@@ -15,11 +15,9 @@ module.exports = async (req, res, next) => {
     }),
 
     body: Joi.object({
-      timeFormat: Joi.string().valid("12 hr", "24 hr").required(),
-      timeZone: Joi.string().required(),
-      payrollType: Joi.string()
-        .valid("Weekly", "Fortnightly", "Monthly")
-        .required(),
+      timeFormat: Joi.string().valid("12 hr", "24 hr"),
+      timeZone: Joi.string(),
+      payrollType: Joi.string().valid("Weekly", "Fortnightly", "Monthly"),
       cashRegister: Joi.number(),
       safeDeposit: Joi.number(),
       closingAmount: Joi.number(),
@@ -29,6 +27,15 @@ module.exports = async (req, res, next) => {
   validateSchema(req, schema);
 
   const { branchId } = req.params;
+
+  const {
+    timeFormat,
+    timeZone,
+    payrollType,
+    cashRegister,
+    safeDeposit,
+    closingAmount,
+  } = req.body;
 
   const _branch = await Branch.findByIdAndUpdate(
     branchId,
@@ -46,7 +53,7 @@ module.exports = async (req, res, next) => {
     departments: 0,
     jobTitles: 0,
     roles: 0,
-    notification: 0,
+    notifications: 0,
   });
 
   return res.json({ branch: _branch });

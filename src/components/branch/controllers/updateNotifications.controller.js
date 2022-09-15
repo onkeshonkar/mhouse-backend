@@ -14,23 +14,29 @@ module.exports = async (req, res, next) => {
       branchId: Joi.string().custom(customValidators.objectId),
     }),
 
-    notifications: Joi.object().pattern(
-      Joi.string().valid(
-        "Tasks Assigned To You",
-        "New Transfer In Finance",
-        "Forecast Update",
-        "Targets Update",
-        "Update In Suppliers",
-        "Items Received",
-        "Update Availability Of Employees"
-      ),
-      Joi.array().items("sms", "email").unique().max(2)
-    ),
+    body: Joi.object({
+      notifications: Joi.object()
+        .pattern(
+          Joi.string().valid(
+            "Tasks Assigned To You",
+            "New Transfer In Finance",
+            "Forecast Update",
+            "Targets Update",
+            "Update In Suppliers",
+            "Items Received",
+            "Update Availability Of Employees"
+          ),
+          Joi.array().items("sms", "email").unique().max(2)
+        )
+        .required(),
+    }),
   };
 
   validateSchema(req, schema);
 
   const { branchId } = req.params;
+
+  const { notifications } = req.body;
 
   const _branch = await Branch.findByIdAndUpdate(
     branchId,

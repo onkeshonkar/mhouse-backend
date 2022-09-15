@@ -10,10 +10,10 @@ const payrollGroupSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    hourlyRate: {
-      type: Number,
-      required: true,
-    },
+    // hourlyRate: {
+    //   type: Number,
+    //   required: true,
+    // },
     weekdayRate: {
       type: Number,
       required: true,

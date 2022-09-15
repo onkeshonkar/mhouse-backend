@@ -33,7 +33,7 @@ router
   .post(addJobTitleController)
   .delete(deleteJobTitleController);
 
-router.put("/settings", updateSettingsController);
-router.put("/notifications", updateNotificationsController);
+router.patch("/settings", updateSettingsController);
+router.patch("/notifications", updateNotificationsController);
 
 module.exports = router;
