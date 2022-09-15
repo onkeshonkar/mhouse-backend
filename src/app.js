@@ -36,7 +36,7 @@ app.use("/ping", (req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
+  next(new ApiError(httpStatus.NOT_FOUND, `${req.url} cann't be found`));
 });
 
 // convert error to ApiError, if needed

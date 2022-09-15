@@ -8,4 +8,10 @@ const updateRestaurentController = require("./controllers/updateRestaurent.contr
 
 const router = express.Router();
 
+router.get("/branches", getAllBranchController);
+router.post("/branches", addBranchController);
+router.put("/branches", updateBranchController);
+router.delete("/branches", deleteBranchController);
+router.get("/branches", getAllBranchController);
+
 module.exports = router;

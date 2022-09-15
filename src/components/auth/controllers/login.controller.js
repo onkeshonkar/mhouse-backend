@@ -33,7 +33,7 @@ module.exports = async (req, res, next) => {
   const user = await User.findOne({ email }).populate("branch");
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password.");
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");
   }
 
   if (!user.emailVerified) {
@@ -41,7 +41,7 @@ module.exports = async (req, res, next) => {
     await emailService.sendOTPEmail(user, otp);
 
     return res.json({
-      message: `verification OTP sent to ${user.email}`,
+      message: `OTP sent to ${user.email}`,
       token,
     });
   }

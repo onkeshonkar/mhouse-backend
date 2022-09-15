@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
     body: Joi.object({
       token: Joi.string().required(),
       password: Joi.string().custom(customValidator.password).required(),
-      pin: Joi.string().custom(customValidator.pin).required(),
+      pin: Joi.string().trim().custom(customValidator.pin).required(),
     }),
   };
 

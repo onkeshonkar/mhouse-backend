@@ -10,21 +10,24 @@ const getDepartmentController = require("./controllers/getDepartment.controller"
 const getJobTitleController = require("./controllers/getJobTitle.controller");
 const getRoleController = require("./controllers/getRole.controller");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
-  .get("/:branchId/departments", getDepartmentController)
-  .post("/:branchId/departments", addDepartmentController)
-  .delete("/:branchId/departments", deleteDepartmentController);
+  .route("/departments")
+  .get(getDepartmentController)
+  .post(addDepartmentController)
+  .delete(deleteDepartmentController);
 
 router
-  .get("/:branchId/roles", getRoleController)
-  .post("/:branchId/roles", addRoleController)
-  .delete("/:branchId/roles", deleteRoleController);
+  .route("/roles")
+  .get(getRoleController)
+  .post(addRoleController)
+  .delete(deleteRoleController);
 
 router
-  .get("/:branchId/jobTitles", getJobTitleController)
-  .post("/:branchId/jobTitles", addJobTitleController)
-  .delete("/:branchId/jobTitles", deleteJobTitleController);
+  .route("/job-titles")
+  .get(getJobTitleController)
+  .post(addJobTitleController)
+  .delete(deleteJobTitleController);
 
 module.exports = router;

@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
 
   const otpDoc = await Otp.findById(otpId);
   if (!otpDoc || otpDoc.otp !== otp) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid otp");
+    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid OTP");
   }
 
   const otpExpired = dayjs().isAfter(dayjs(otpDoc.expiry));

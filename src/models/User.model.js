@@ -1,3 +1,4 @@
+const { required } = require("joi");
 const mongoose = require("mongoose");
 
 const toJSON = require("../utils/toJSON");
@@ -8,7 +9,7 @@ const rolesSchema = mongoose.Schema(
   {
     role: {
       type: String,
-      required: true,
+      // required: true,
       //   enum: ["Owner", "Manager", "Staff"],
     },
     access: {
@@ -72,7 +73,10 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ["OWNER", "MANAGER"],
     },
-    roles: rolesSchema,
+    roles: {
+      type: rolesSchema,
+      required: true,
+    },
     branch: {
       type: ObjectId,
       ref: "Branch",

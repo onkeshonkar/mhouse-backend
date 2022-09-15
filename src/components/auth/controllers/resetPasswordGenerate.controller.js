@@ -28,5 +28,5 @@ module.exports = async (req, res, next) => {
 
   const token = await tokenService.generateResetPasswordToken(user);
   await emailService.sendResetPasswordEmail(user, token);
-  res.json({ message: "Password reset link sent to your email." });
+  res.json({ message: "Password reset link sent to your email" });
 };

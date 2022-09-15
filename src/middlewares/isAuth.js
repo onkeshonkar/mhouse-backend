@@ -26,7 +26,7 @@ const auth = async (req, res, next) => {
   }
 
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User D");
+    throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist");
   }
 
   req.user = user;

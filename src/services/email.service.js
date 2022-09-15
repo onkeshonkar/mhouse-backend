@@ -71,3 +71,9 @@ module.exports = {
   sendOTPEmail,
   sendInvitationEmail,
 };
+
+// Hello there!
+// Your Stoplight email verification code is 56d0513786e9.
+// Please enter this code in Stoplight to confirm your email.
+// Thanks,
+// The Stoplight Team

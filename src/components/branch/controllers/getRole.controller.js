@@ -24,12 +24,6 @@ module.exports = async (req, res, next) => {
     restaurent: 1,
   });
 
-  const { restaurent } = req.user.branch;
-
-  if (branch.restaurent.toString() !== restaurent.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN); // denying access if restaurent of user and requested branch don't match
-  }
-
   if (
     req.user.type === "OWNER" ||
     (req.user.type === "MANAGER" && req.user.branch.id === branchId)

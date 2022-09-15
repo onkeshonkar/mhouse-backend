@@ -34,10 +34,7 @@ module.exports = async (req, res, next) => {
 
     const userExits = await User.findOne({ email });
     if (userExits) {
-      throw new ApiError(
-        httpStatus.CONFLICT,
-        `${email} is already registered!`
-      );
+      throw new ApiError(httpStatus.CONFLICT, `${email} is already registered`);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -69,7 +66,7 @@ module.exports = async (req, res, next) => {
     await emailService.sendOTPEmail(user, otp);
 
     return res.json({
-      message: `verification OTP sent to ${user.email}`,
+      message: `OTP sent to ${user.email}`,
       token,
     });
   } catch (error) {
