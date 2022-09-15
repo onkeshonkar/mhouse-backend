@@ -46,7 +46,7 @@ const branchSchema = mongoose.Schema(
     departments: [String],
     jobTitles: [String],
     roles: [String],
-    notification: {
+    notifications: {
       type: Object,
       default: {
         "Tasks Assigned To You": ["email", "sms"],

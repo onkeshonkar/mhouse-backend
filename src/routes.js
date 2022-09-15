@@ -11,6 +11,6 @@ const router = express.Router();
 
 router.use("/user/auth", authRoute);
 router.use("/branches/:branchId", isAuth, isSameRestaurent, branchRoute);
-router.use("/restaurents", isAuth, restaurentRoute);
+router.use("/restaurents/:rId", isAuth, restaurentRoute);
 
 module.exports = router;
