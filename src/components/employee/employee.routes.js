@@ -8,6 +8,7 @@ const updateEmployeeController = require("./controllers/updateEmployee.controlle
 const addResumeController = require("./controllers/addResume.controller");
 const addSickCertificateController = require("./controllers/addSickCertificate.controller");
 const updateContactController = require("./controllers/updateContectInfo.controller");
+const updateAccessController = require("./controllers/updateAccess.controller");
 
 const router = express.Router({ mergeParams: true });
 
@@ -18,6 +19,7 @@ router.patch("/:empId", updateEmployeeController);
 router.patch("/:empId/resume", addResumeController);
 router.patch("/:empId/sick-certificates", addSickCertificateController);
 router.patch("/:empId/contact", updateContactController);
+router.patch("/:empId/access", updateAccessController);
 router.patch("/:empId", updateEmployeeController);
 router.delete(":/empId", deleteEmployeeController);
 

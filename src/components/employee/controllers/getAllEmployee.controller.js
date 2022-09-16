@@ -22,8 +22,6 @@ module.exports = async (req, res, next) => {
 
   const { branchId } = req.params;
 
-  console.log("hi");
-
   if (!canAccess(req.user, "WORKFORCE", "view")) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
@@ -35,7 +33,7 @@ module.exports = async (req, res, next) => {
     branch: new ObjectId(branchId),
   })
     .populate("payrollGroup", ["name"])
-    .populate("user", ["fullName"]);
+    .populate("user", ["fullName", "roles"]);
 
   res.json({ employees });
 };
