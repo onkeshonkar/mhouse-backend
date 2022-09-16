@@ -23,6 +23,7 @@ const fundTransferSchema = mongoose.Schema(
     status: {
       type: String,
       enum: ["Pending", "Canceled", "Approved"],
+      default: "Pending",
       required: true,
     },
     comment: String,

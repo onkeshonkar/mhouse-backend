@@ -51,6 +51,15 @@ const closingDaySchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    totalIncome: {
+      type: Number,
+      required: true,
+    },
+    registeredBy: {
+      type: ObjectId,
+      ref: "User",
+      required: true,
+    },
     branch: {
       type: ObjectId,
       ref: "Branch",

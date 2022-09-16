@@ -5,6 +5,7 @@ const branchRoutes = require("./components/branch/branch.routes");
 const restaurentRoutes = require("./components/restaurent/restaurent.routes");
 const payrollGroupRoutes = require("./components/payrollGroup/payrollGroup.routes");
 const employeeRoutes = require("./components/employee/employee.routes");
+const financeRoutes = require("./components/finance/finance.routes");
 
 const userRoutes = require("./components/user/user.routes");
 
@@ -42,5 +43,7 @@ router.use(
 );
 
 router.use("/user", isAuth, userRoutes);
+
+router.use("/branches/:branchId/", isInSameRestaurent, isAuth, financeRoutes);
 
 module.exports = router;
