@@ -6,6 +6,8 @@ const restaurentRoutes = require("./components/restaurent/restaurent.routes");
 const payrollGroupRoutes = require("./components/payrollGroup/payrollGroup.routes");
 const employeeRoutes = require("./components/employee/employee.routes");
 
+const userRoutes = require("./components/user/user.routes");
+
 const isAuth = require("./middlewares/isAuth");
 const isInSameRestaurent = require("./middlewares/isInSameRestaurent");
 const isOwnerOrManager = require("./middlewares/isOwnerOrManager");
@@ -38,5 +40,7 @@ router.use(
   isInSameRestaurent,
   employeeRoutes
 );
+
+router.use("/user", isAuth, userRoutes);
 
 module.exports = router;
