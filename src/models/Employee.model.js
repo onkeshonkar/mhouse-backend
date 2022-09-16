@@ -4,20 +4,23 @@ const toJSON = require("../utils/toJSON");
 
 const { ObjectId } = mongoose.Types;
 
-const emergencyContactSchema = mongoose.Schema({
-  fullName: {
-    type: String,
-    required: true,
+const emergencyContactSchema = mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+    relation: {
+      type: String,
+      required: true,
+    },
   },
-  phoneNumber: {
-    type: String,
-    required: true,
-  },
-  relation: {
-    type: String,
-    required: true,
-  },
-});
+  { _id: false }
+);
 
 const experienceSchema = mongoose.Schema(
   {
@@ -48,15 +51,7 @@ const visaSchema = mongoose.Schema(
   { _id: false }
 );
 
-const sickLeavesSchema = mongoose.Schema(
-  {
-    consumed: { type: Number, default: 0 },
-    available: { type: Number, default: 0 },
-  },
-  { _id: false }
-);
-
-const annualLeavesSchema = mongoose.Schema(
+const leavesSchema = mongoose.Schema(
   {
     consumed: { type: Number, default: 0 },
     available: { type: Number, default: 0 },
@@ -106,8 +101,8 @@ const employeeSchema = mongoose.Schema(
       required: true,
     },
     workSlot: [[String, String]],
-    sickLeave: sickLeavesSchema,
-    annualLeave: annualLeavesSchema,
+    sickLeave: leavesSchema,
+    annualLeave: leavesSchema,
     emergencyContact: { type: emergencyContactSchema, required: true },
     experience: experienceSchema,
     resumeUrl: String,

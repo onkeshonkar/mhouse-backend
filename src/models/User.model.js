@@ -5,32 +5,33 @@ const toJSON = require("../utils/toJSON");
 
 const { ObjectId } = mongoose.Types;
 
+const defaultAccess = {
+  TASKS: ["view"],
+  SUPPLIER: [],
+  STOCKTAKE: [],
+  BUILD_CART: [],
+  CASH_REGISTER: [],
+  CLOSING_DAY: [],
+  SAFE_DEPOSIT: [],
+  FUND_TRANSFER: [],
+  SCHEDULE_SHIFT: ["view"],
+  WORKFORCE: [],
+  CATERING_ORDERS: ["view"],
+  OPERATIONS: [],
+  MENU: ["view"],
+  NEWS_FEED: ["view"], // only view and add
+  SETTINGS: ["view"], // only view and edit
+};
+
 const rolesSchema = mongoose.Schema(
   {
     role: {
       type: String,
-      // required: true,
-      //   enum: ["Owner", "Manager", "Staff"],
+      default: null, // will be assigned teams/role
     },
     access: {
       type: Object,
-      default: {
-        TASKS: ["view"],
-        SUPPLIER: [],
-        STOCKTAKE: [],
-        BUILD_CART: [],
-        CASH_REGISTER: [],
-        CLOSING_DAY: [],
-        SAFE_DEPOSIT: [],
-        FUND_TRANSFER: [],
-        SCHEDULE_SHIFT: ["view"],
-        WORKFORCE: [],
-        CATERING_ORDERS: ["view"],
-        OPERATIONS: [],
-        MENU: ["view"],
-        NEWS_FEED: ["view"], // only view and add
-        SETTINGS: ["view"], // only view and edit
-      },
+      required: true,
     },
   },
 
@@ -52,7 +53,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       lowercase: true,
-      sparse: true,
       unique: true,
     },
     password: {
@@ -76,6 +76,7 @@ const userSchema = mongoose.Schema(
     roles: {
       type: rolesSchema,
       required: true,
+      default: { roll: null, access: defaultAccess },
     },
     branch: {
       type: ObjectId,
