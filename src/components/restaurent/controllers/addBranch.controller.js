@@ -7,6 +7,8 @@ const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 
 const Branch = require("../../../models/Branch.model");
+const User = require("../../../models/User.model");
+const Employee = require("../../../models/Employee.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -34,12 +36,22 @@ module.exports = async (req, res, next) => {
     );
   }
 
-  const branch = await Branch.create({
+  const _branch = await Branch.create({
     name,
     manager,
     address,
     restaurent: rId,
   });
 
-  res.status(httpStatus.CREATED).send({ branch });
+  const _user = await User.findById(manager);
+
+  if (_user.type !== "OWNER") {
+    _user.branch = _branch.id;
+    _user.type = "MANAGER";
+    await _user.save();
+  }
+
+  await Employee.findOneAndUpdate({ user: _user.id }, { branch: _branch.id });
+
+  res.status(httpStatus.CREATED).send({ branch: _branch });
 };
