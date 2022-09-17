@@ -86,7 +86,7 @@ const userSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-toJSON(userSchema, "password");
+toJSON(userSchema);
 
 const User = mongoose.model("User", userSchema);
 

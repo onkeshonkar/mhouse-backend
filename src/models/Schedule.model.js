@@ -31,9 +31,9 @@ const scheduleSchema = mongoose.Schema(
       ref: "Employee",
       required: true,
     },
-    inDraft: {
+    published: {
       type: Boolean,
-      default: true, // false means published and employee can see
+      default: false, // true means published and employee can see
     },
     branch: {
       type: Object,
@@ -42,6 +42,11 @@ const scheduleSchema = mongoose.Schema(
     },
   },
   { timestamps: true }
+);
+
+scheduleSchema.index(
+  { scheduledDate: 1, employee: 1, branch: 1 },
+  { unique: true }
 );
 
 toJSON(scheduleSchema, false);
