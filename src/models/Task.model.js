@@ -11,7 +11,7 @@ const checklistSchema = mongoose.Schema(
       required: true,
     },
     dueTime: {
-      type: String,
+      type: String, // stoer time only in HH:mm 24 hr format
     },
     completed: {
       type: Boolean,
@@ -29,14 +29,18 @@ const taskSchema = mongoose.Schema(
     },
     comment: String,
     checkList: [checklistSchema],
-    assignedDepartment: {
+    department: {
       type: String,
       required: true,
     },
     status: {
       type: String,
-      enum: ["Open", "Pending", "Completed", "InProgress"],
-      default: "Open",
+      enum: ["open", "pending", "completed", "in-progress"],
+      default: "open",
+    },
+    dueDate: {
+      type: Date,
+      required: true,
     },
     createdBy: {
       type: Object,
@@ -46,6 +50,7 @@ const taskSchema = mongoose.Schema(
     completedBy: {
       type: Object,
       ref: "User",
+      default: null,
     },
     branch: {
       type: Object,

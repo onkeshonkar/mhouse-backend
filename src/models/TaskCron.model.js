@@ -13,12 +13,8 @@ const checklistSchema = mongoose.Schema(
     dueTime: {
       type: String,
     },
-    completed: {
-      type: Boolean,
-      default: false,
-    },
   },
-  { _id: true }
+  { _id: false }
 );
 
 const TaskCronSchema = mongoose.Schema(
@@ -29,12 +25,12 @@ const TaskCronSchema = mongoose.Schema(
     },
     comment: String,
     checkList: [checklistSchema],
-    assignedDepartments: [String],
+    departments: [String],
     repeateType: {
       type: String,
       enum: ["Daily", "Weekly", "Monthly"],
     },
-    monthlyDueDate: Date,
+    monthlyDueDate: Number,
     weeklyDueDay: {
       type: String,
       enum: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
