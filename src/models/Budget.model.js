@@ -10,9 +10,10 @@ const budgetSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    totalRosterTime: {
+    totalTime: {
       type: Number,
       required: true,
+      default: 0,
     },
     budgetDate: {
       type: Date,

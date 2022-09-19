@@ -27,8 +27,8 @@ module.exports = async (req, res, next) => {
         "Sick Leave"
       ),
     })
-      .with("scheduledSlot", "breakTime")
-      .xor("scheduledSlot", "leaveType"),
+      .xor("scheduledSlot", "leaveType")
+      .with("scheduledSlot", "breakTime"),
   };
 
   validateSchema(req, schema);
@@ -43,32 +43,31 @@ module.exports = async (req, res, next) => {
       "You are not allowed to access this resource"
     );
   }
-  const session = await mongoose.startSession();
-  session.startTransaction();
 
-  const schedule = await Schedule.findByIdAndUpdate(
-    scheduleId,
-    {
-      scheduledSlot,
-      breakTime,
-      leaveType,
-    },
-    { session }
-  );
-
-  // if scheduledDate + 14days >= today --> deletion allowed
+  const schedule = await Schedule.findById(scheduleId);
 
   if (dayjs(schedule.scheduledDate).add(14, "days").isBefore(dayjs())) {
-    await session.abortTransaction();
-    session.endSession();
+    // if scheduledDate + 14days >= today --> deletion allowed
+
     throw new ApiError(
       httpStatus.BAD_REQUEST,
       "Cann't modify schedule older than 2 weeks"
     );
   }
 
-  await session.commitTransaction();
-  session.endSession();
+  if (leaveType) {
+    schedule.scheduledSlot = [];
+    schedule.breakTime = undefined;
+    schedule.leaveType = leaveType;
+  }
+
+  if (scheduledSlot && scheduledSlot.length) {
+    schedule.scheduledSlot = scheduledSlot;
+    schedule.breakTime = breakTime;
+    schedule.leaveType = undefined;
+  }
+
+  await schedule.save();
 
   res.status(httpStatus.NO_CONTENT).send();
 };
