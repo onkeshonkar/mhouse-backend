@@ -19,6 +19,11 @@ const budgetSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    branch: {
+      type: ObjectId,
+      ref: "Branch",
+      required: true,
+    },
   },
   { timestamps: true }
 );
