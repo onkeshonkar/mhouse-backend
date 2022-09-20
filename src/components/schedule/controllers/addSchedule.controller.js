@@ -1,14 +1,16 @@
 const httpStatus = require("http-status");
 const Joi = require("joi");
+const dayjs = require("dayjs");
 require("express-async-errors");
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
+const timeDifference = require("../../../utils/timeDifference");
 
 const Schedule = require("../../../models/Schedule.model");
-const dayjs = require("dayjs");
+const Budget = require("../../../models/Budget.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -17,7 +19,10 @@ module.exports = async (req, res, next) => {
     }),
 
     body: Joi.object({
-      scheduledSlot: Joi.array().items(Joi.string()).length(2),
+      scheduledSlot: Joi.array()
+        .items(Joi.string().custom(customValidators.time))
+        .length(2)
+        .custom(customValidators.timeDuration),
       breakTime: Joi.number(),
       scheduledDate: Joi.date().required(),
       leaveType: Joi.string().valid(
@@ -60,6 +65,14 @@ module.exports = async (req, res, next) => {
       employee,
       branch: branchId,
     });
+
+    const totalWorkMinute = timeDifference(scheduledSlot[0], scheduledSlot[1]);
+    await Budget.findOneAndUpdate(
+      { branch: branchId, budgetDate: scheduledDate },
+      { totalWorkMinute },
+      { upsert: true }
+    );
+
     res.status(httpStatus.CREATED).send({ schedule });
   } catch (error) {
     throw next(

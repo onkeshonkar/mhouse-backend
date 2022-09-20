@@ -1,15 +1,16 @@
 const httpStatus = require("http-status");
 const Joi = require("joi");
 require("express-async-errors");
-const mongoose = require("mongoose");
 const dayjs = require("dayjs");
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
+const timeDifference = require("../../../utils/timeDifference");
 
 const Schedule = require("../../../models/Schedule.model");
+const Budget = require("../../../models/Budget.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -52,6 +53,23 @@ module.exports = async (req, res, next) => {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
       "Cann't modify schedule older than 2 weeks"
+    );
+  }
+
+  const newTime = timeDifference(scheduledSlot?.[0], scheduledSlot?.[1]);
+
+  const oldTime = timeDifference(
+    schedule?.scheduledSlot?.[0],
+    schedule?.scheduledSlot?.[1]
+  );
+  const timeDiff = newTime - oldTime;
+  if (timeDiff) {
+    await Budget.findOneAndUpdate(
+      {
+        branch: branchId,
+        budgetDate: schedule.scheduledDate,
+      },
+      { $inc: { totalWorkMinute: timeDiff } }
     );
   }
 

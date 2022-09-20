@@ -36,22 +36,38 @@ const pin = (value, helpers) => {
   return parseInt(value);
 };
 
-const ip = (value, helpers) => {
-  const pinRegex = /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/;
-  if (!value.match(pinRegex)) {
-    return helpers.message("{{#label}} is not valid ip");
-  }
-
-  return parseInt(value);
-};
-
 const mac = (value, helpers) => {
   const pinRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
   if (!value.match(pinRegex)) {
     return helpers.message("{{#label}} is not valid mac");
   }
 
-  return parseInt(value);
+  return value;
+};
+
+const time = (value, helpers) => {
+  const timeRegex = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/;
+  if (!value.match(timeRegex)) {
+    return helpers.message("{{#label}} is not valid time(HH:mm)");
+  }
+
+  return value;
+};
+
+const timeDuration = (value, helpers) => {
+  if (value.length !== 2) {
+    return helpers.message(
+      "{{#label}} is not valid array of time [start, end]"
+    );
+  }
+
+  if (value[0] >= value[1]) {
+    return helpers.message(
+      "{{#label}}[0] should be smaller than {{#label}}[1]"
+    );
+  }
+
+  return value;
 };
 
 module.exports = {
@@ -59,6 +75,7 @@ module.exports = {
   password,
   phoneNumber,
   pin,
-  ip,
   mac,
+  time,
+  timeDuration,
 };

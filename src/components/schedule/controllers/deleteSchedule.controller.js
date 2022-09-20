@@ -7,8 +7,10 @@ const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
+const timeDifference = require("../../../utils/timeDifference");
 
 const Schedule = require("../../../models/Schedule.model");
+const Budget = require("../../../models/Budget.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -37,6 +39,21 @@ module.exports = async (req, res, next) => {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
       "Cann't delete schedule older than 2 weeks"
+    );
+  }
+
+  const oldTime = timeDifference(
+    schedule?.scheduledSlot?.[0],
+    schedule?.scheduledSlot?.[1]
+  );
+
+  if (oldTime) {
+    await Budget.findOneAndUpdate(
+      {
+        branch: branchId,
+        budgetDate: schedule.scheduledDate,
+      },
+      { $inc: { totalWorkMinute: -oldTime } }
     );
   }
 

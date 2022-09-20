@@ -9,8 +9,9 @@ const budgetSchema = mongoose.Schema(
     allocatedAmount: {
       type: Number,
       required: true,
+      default: 0,
     },
-    totalTime: {
+    totalWorkMinute: {
       type: Number,
       required: true,
       default: 0,

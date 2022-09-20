@@ -45,7 +45,7 @@ module.exports = async (req, res, next) => {
       }),
     }),
 
-    ip: Joi.string().custom(customValidators.ip),
+    ip: Joi.string().ip(),
     mac: Joi.string().custom(customValidators.mac),
   };
 
@@ -85,7 +85,7 @@ module.exports = async (req, res, next) => {
 
     await session.commitTransaction();
     session.endSession();
-    console.log("it is being saved");
+
     res.status(httpStatus.NO_CONTENT).send();
   } catch (error) {
     await session.abortTransaction();
