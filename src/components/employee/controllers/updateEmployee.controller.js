@@ -55,8 +55,12 @@ module.exports = async (req, res, next) => {
       payrollGroup: Joi.string().custom(customValidators.objectId),
 
       workSlot: Joi.array()
-        .items(Joi.array().items(Joi.string()).max(2))
-        .length(7),
+        .items(
+          Joi.array().items(Joi.string().custom(customValidators.time)).max(2)
+        )
+        .length(7)
+        .custom(customValidators.workSlot)
+        .required(),
     }),
   };
 

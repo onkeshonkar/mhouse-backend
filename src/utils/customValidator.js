@@ -70,6 +70,21 @@ const timeDuration = (value, helpers) => {
   return value;
 };
 
+const workSlot = (value, helpers) => {
+  let inValidTime = false;
+  value.forEach((slot) => {
+    if (slot[0] >= slot[1]) {
+      inValidTime = true;
+      return;
+    }
+  });
+
+  if (inValidTime)
+    return helpers.message("start time should be smaller than end time");
+
+  return value;
+};
+
 module.exports = {
   objectId,
   password,
@@ -78,4 +93,5 @@ module.exports = {
   mac,
   time,
   timeDuration,
+  workSlot,
 };

@@ -70,8 +70,11 @@ module.exports = async (req, res, next) => {
       payrollGroup: Joi.string().custom(customValidators.objectId).required(),
 
       workSlot: Joi.array()
-        .items(Joi.array().items(Joi.string()).max(2))
+        .items(
+          Joi.array().items(Joi.string().custom(customValidators.time)).max(2)
+        )
         .length(7)
+        .custom(customValidators.workSlot)
         .required(),
 
       emergencyContact: emergencyContactSchema,
