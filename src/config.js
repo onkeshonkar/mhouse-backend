@@ -12,6 +12,11 @@ const config = {
     secret: process.env.JWT_SECRET || "itsrandombutstillnotrandom",
   },
 
+  do: {
+    accessKeyId: process.env.DO_SPACE_ACCESS || "DO003BWEFNNBF3HC7GFL",
+    secretAccessKey: process.env.DO_SPACE_SECRET,
+  },
+
   otp_expiry: process.env.OTP_EXPIRY_MINUTES || 15,
 
   email: {

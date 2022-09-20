@@ -3,7 +3,7 @@ const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const tokenService = require("../services/token.service");
 
-const auth = async (req, res, next) => {
+const isAuth = async (req, res, next) => {
   let token =
     req.headers["x-access-token"] ||
     req.headers.authorization ||
@@ -35,4 +35,4 @@ const auth = async (req, res, next) => {
   next();
 };
 
-module.exports = auth;
+module.exports = isAuth;

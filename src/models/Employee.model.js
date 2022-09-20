@@ -105,7 +105,7 @@ const employeeSchema = mongoose.Schema(
     annualLeave: leavesSchema,
     emergencyContact: { type: emergencyContactSchema, required: true },
     experience: experienceSchema,
-    resumeUrl: String,
+    resume: String,
     sickCertificates: [String],
     badges: [String],
     branch: {

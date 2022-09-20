@@ -9,12 +9,14 @@ const financeRoutes = require("./components/finance/finance.routes");
 const scheduleRoutes = require("./components/schedule/schedule.routes");
 const taskRoutes = require("./components/task/task.routes");
 const BudgetRoutes = require("./components/budget/budget.routes");
-
 const userRoutes = require("./components/user/user.routes");
+
+const uploadRoutes = require("./components/uploads/uploads.routes");
 
 const isAuth = require("./middlewares/isAuth");
 const isInSameRestaurent = require("./middlewares/isInSameRestaurent");
 const isOwnerOrManager = require("./middlewares/isOwnerOrManager");
+const multer = require("./middlewares/multer");
 
 const router = express.Router();
 
@@ -64,5 +66,7 @@ router.use(
   isAuth,
   BudgetRoutes
 );
+
+router.use("/uploads", isAuth, multer.any(), uploadRoutes);
 
 module.exports = router;
