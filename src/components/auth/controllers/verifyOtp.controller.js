@@ -16,13 +16,13 @@ module.exports = async (req, res, next) => {
   const schema = {
     body: Joi.object({
       otp: Joi.string().trim().required(),
-      token: Joi.string().custom(customValidator.objectId).required(),
+      verifyOTPToken: Joi.string().custom(customValidator.objectId).required(),
     }),
   };
 
   validateSchema(req, schema);
 
-  const { otp, token: otpId } = req.body;
+  const { otp, verifyOTPToken: otpId } = req.body;
 
   const otpDoc = await Otp.findById(otpId);
   if (!otpDoc || otpDoc.otp !== otp) {
@@ -45,5 +45,5 @@ module.exports = async (req, res, next) => {
 
   const authToken = tokenService.generateAuthToken(user.id);
 
-  res.json({ user, token: authToken });
+  res.json({ user, authToken });
 };

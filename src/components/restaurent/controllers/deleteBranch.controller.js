@@ -20,6 +20,7 @@ module.exports = async (req, res, next) => {
   validateSchema(req, schema);
 
   const { branchId } = req.params;
+  // delete  role 'Manager from roles.role
 
   const branch = await Branch.findByIdAndUpdate(branchId, { deleted: true });
 

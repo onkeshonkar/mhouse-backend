@@ -62,12 +62,14 @@ module.exports = async (req, res, next) => {
     user.branch = branch.id;
     await user.save();
 
-    const { otp, token } = await tokenService.generateOTPToken(user.id);
+    const { otp, verifyOTPToken } = await tokenService.generateOTPToken(
+      user.id
+    );
     await emailService.sendOTPEmail(user, otp);
 
     return res.json({
       message: `OTP sent to ${user.email}`,
-      token,
+      verifyOTPToken,
     });
   } catch (error) {
     next(error);

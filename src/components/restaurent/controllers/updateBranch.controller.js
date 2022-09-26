@@ -37,6 +37,7 @@ module.exports = async (req, res, next) => {
     oldManager.type = undefined;
     await oldManager.save();
   }
+  // update  role 'Manager from roles.role
 
   const newManger = await User.findByIdAndUpdate(manager, { name, address });
 

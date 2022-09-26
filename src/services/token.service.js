@@ -125,7 +125,7 @@ const generateOTPToken = async (userId) => {
   const otp = generateOtp();
   const expiry = dayjs().add(config.otp_expiry, "minute");
   const otpDoc = await Otp.create({ otp, expiry, user: userId });
-  return { token: otpDoc.id, otp };
+  return { verifyOTPToken: otpDoc.id, otp };
 };
 
 module.exports = {

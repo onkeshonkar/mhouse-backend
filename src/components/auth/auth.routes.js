@@ -7,14 +7,14 @@ const checkoutController = require("./controllers/checkout.controller");
 const invitationInfoController = require("./controllers/invitationInfo.controller");
 const isEmailAvailableController = require("./controllers/isEmailAvailable.controller");
 const loginController = require("./controllers/login.controller");
-const registerController = require("./controllers/register.controller");
+const signupController = require("./controllers/signup.controller");
 const resetpasswordGeneratorController = require("./controllers/resetPasswordGenerate.controller");
 const resetPasswordInfoController = require("./controllers/resetPasswordInfo.controller");
 const resetPasswordController = require("./controllers/resetPassword.controller");
 const createPasswordController = require("./controllers/createPassword.controller");
 const verifyOtpController = require("./controllers/verifyOtp.controller");
 
-router.post("/signup", registerController);
+router.post("/signup", signupController);
 router.post("/login", loginController);
 router.post("/reset-password/generate", resetpasswordGeneratorController);
 router.post("/reset-password/info", resetPasswordInfoController);

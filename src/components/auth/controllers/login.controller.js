@@ -37,17 +37,19 @@ module.exports = async (req, res, next) => {
   }
 
   if (!user.emailVerified) {
-    const { otp, token } = await tokenService.generateOTPToken(user.id);
+    const { otp, verifyOTPToken } = await tokenService.generateOTPToken(
+      user.id
+    );
     await emailService.sendOTPEmail(user, otp);
 
     return res.json({
       message: `OTP sent to ${user.email}`,
-      token,
+      verifyOTPToken,
     });
   }
 
   // rate limiter login here
 
-  const token = tokenService.generateAuthToken(user.id);
-  res.json({ user, token });
+  const authToken = tokenService.generateAuthToken(user.id);
+  res.json({ user, authToken });
 };
