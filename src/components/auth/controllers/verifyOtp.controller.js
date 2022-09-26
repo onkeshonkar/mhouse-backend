@@ -39,7 +39,14 @@ module.exports = async (req, res, next) => {
     otpDoc.user,
     { emailVerified: true },
     { new: true }
-  );
+  ).populate({
+    path: "branch",
+    select: { deleted: 0, departments: 0, jobTitles: 0, roles: 0 },
+    populate: {
+      path: "restaurent",
+      select: { deleted: 0 },
+    },
+  });
   otpDoc.usedAt = dayjs();
   await otpDoc.save();
 

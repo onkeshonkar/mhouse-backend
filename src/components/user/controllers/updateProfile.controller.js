@@ -19,8 +19,6 @@ module.exports = async (req, res, next) => {
       phoneNumber: Joi.string().custom(customValidators.phoneNumber).required(),
       dateOfBirth: Joi.date().required(),
       email: Joi.string().email().trim().required(),
-
-      // avatar:
     }),
   };
 
@@ -45,5 +43,9 @@ module.exports = async (req, res, next) => {
     { new: true }
   );
 
-  res.send({ user });
+  if (!user) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "User doesn't exists");
+  }
+
+  res.status(httpStatus.NO_CONTENT).send();
 };

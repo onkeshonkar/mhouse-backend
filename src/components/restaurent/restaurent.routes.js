@@ -15,6 +15,6 @@ router.post("/branches", addBranchController);
 router.patch("/branches/:branchId", isInSameResturent, updateBranchController);
 router.delete("/branches/:branchId", isInSameResturent, deleteBranchController);
 
-router.get("/businnes-details", updateBussinessDataController);
+router.patch("/businnes-details", updateBussinessDataController);
 
 module.exports = router;

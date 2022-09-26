@@ -28,6 +28,7 @@ module.exports = async (req, res, next) => {
     name: 1,
     manager: 1,
     isMainBranch: 1,
+    restaurent: 1,
   });
 
   res.send({ branches });

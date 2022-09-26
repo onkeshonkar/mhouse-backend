@@ -30,7 +30,14 @@ module.exports = async (req, res, next) => {
 
   validateSchema(req, schema);
   const { email, password } = req.body;
-  const user = await User.findOne({ email }).populate("branch");
+  const user = await User.findOne({ email }).populate({
+    path: "branch",
+    select: { deleted: 0, departments: 0, jobTitles: 0, roles: 0 },
+    populate: {
+      path: "restaurent",
+      select: { deleted: 0 },
+    },
+  });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");

@@ -12,6 +12,7 @@ const getRoleController = require("./controllers/getRole.controller");
 
 const updateSettingsController = require("./controllers/updateSettings.controller");
 const updateNotificationsController = require("./controllers/updateNotifications.controller");
+const updateBankDetailsController = require("./controllers/updateBankDetails.controller");
 
 const router = express.Router({ mergeParams: true });
 
@@ -34,6 +35,7 @@ router
   .delete(deleteJobTitleController);
 
 router.patch("/settings", updateSettingsController);
+router.patch("/bank-details", updateBankDetailsController);
 router.patch("/notifications", updateNotificationsController);
 
 module.exports = router;

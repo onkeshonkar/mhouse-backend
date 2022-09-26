@@ -1,7 +1,5 @@
-const httpStatus = require("http-status");
 require("express-async-errors");
 const Joi = require("joi");
-const dayjs = require("dayjs");
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
@@ -14,7 +12,14 @@ module.exports = async (req, res, next) => {
 
   validateSchema(req, schema);
 
-  const user = await User.findById(req.user.id).populate("branch");
+  const user = await User.findById(req.user.id).populate({
+    path: "branch",
+    select: { deleted: 0, departments: 0, jobTitles: 0, roles: 0 },
+    populate: {
+      path: "restaurent",
+      select: { deleted: 0 },
+    },
+  });
 
   res.json({ user });
 };
