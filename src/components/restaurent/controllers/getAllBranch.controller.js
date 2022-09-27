@@ -14,22 +14,36 @@ module.exports = async (req, res, next) => {
     params: Joi.object({
       rId: Joi.string().custom(customValidators.objectId).required(),
     }),
+    query: Joi.object({
+      details: Joi.string().valid("basic", "semi", "full").default("basic"),
+    }),
   };
 
   validateSchema(req, schema);
 
   const { rId } = req.params;
+  const { details } = req.query;
 
   if (rId !== req.user.restaurent.toString()) {
     throw new ApiError(httpStatus.FORBIDDEN);
   }
 
-  const branches = await Branch.find({ restaurent: new ObjectId(rId) }).select({
-    name: 1,
-    manager: 1,
-    isMainBranch: 1,
-    restaurent: 1,
-  });
+  let select = {};
+
+  if (details === "basic") {
+    select = { name: 1, manager: 1, isMainBranch: 1, restaurent: 1 };
+  } else if (details === "semi") {
+    select = {
+      deleted: 0,
+      departments: 0,
+      jobTitles: 0,
+      roles: 0,
+    };
+  }
+
+  const branches = await Branch.find({ restaurent: new ObjectId(rId) }).select(
+    select
+  );
 
   res.send({ branches });
 };
