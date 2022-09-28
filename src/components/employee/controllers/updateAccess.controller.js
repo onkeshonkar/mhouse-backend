@@ -43,10 +43,10 @@ module.exports = async (req, res, next) => {
         role: Joi.string().trim(),
         access: accessSchema,
       }),
-    }),
 
-    ip: Joi.string().ip(),
-    mac: Joi.string().custom(customValidators.mac),
+      ip: Joi.string().ip(),
+      mac: Joi.string().custom(customValidators.mac),
+    }),
   };
 
   validateSchema(req, schema);

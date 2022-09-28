@@ -16,10 +16,10 @@ module.exports = async (req, res, next) => {
 
     body: Joi.object({
       name: Joi.string().trim().required(),
-      weekdayRate: Joi.number().required(),
-      publicHolidayRate: Joi.number().required(),
-      saturdayRate: Joi.number().required(),
-      sundayRate: Joi.number().required(),
+      weekdayRate: Joi.number().min(1).required(),
+      publicHolidayRate: Joi.number().min(1).required(),
+      saturdayRate: Joi.number().min(1).required(),
+      sundayRate: Joi.number().min(1).required(),
     }),
   };
 

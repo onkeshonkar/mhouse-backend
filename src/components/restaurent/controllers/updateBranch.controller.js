@@ -29,7 +29,11 @@ module.exports = async (req, res, next) => {
 
   const { name, manager, address } = req.body;
 
-  const branch = await Branch.findById(branchId);
+  const branch = await Branch.findByIdAndUpdate(branchId, {
+    name,
+    manager,
+    address,
+  });
 
   const oldManager = await User.findById(branch.manager);
 

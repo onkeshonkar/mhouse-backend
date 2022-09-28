@@ -47,5 +47,6 @@ module.exports = async (req, res, next) => {
   ).select({
     notifications: 1,
   });
-  return res.json({ notifications: _branch.notifications });
+
+  return res.status(httpStatus.NO_CONTENT).send();
 };

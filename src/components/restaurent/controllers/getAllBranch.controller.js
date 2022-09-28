@@ -16,13 +16,14 @@ module.exports = async (req, res, next) => {
     }),
     query: Joi.object({
       details: Joi.string().valid("basic", "semi", "full").default("basic"),
+      manager: Joi.boolean().default(false),
     }),
   };
 
   validateSchema(req, schema);
 
   const { rId } = req.params;
-  const { details } = req.query;
+  const { details, manager } = req.query;
 
   if (rId !== req.user.restaurent.toString()) {
     throw new ApiError(httpStatus.FORBIDDEN);
@@ -31,7 +32,13 @@ module.exports = async (req, res, next) => {
   let select = {};
 
   if (details === "basic") {
-    select = { name: 1, manager: 1, isMainBranch: 1, restaurent: 1 };
+    select = {
+      name: 1,
+      manager: 1,
+      isMainBranch: 1,
+      restaurent: 1,
+      address: 1,
+    };
   } else if (details === "semi") {
     select = {
       deleted: 0,
@@ -41,9 +48,21 @@ module.exports = async (req, res, next) => {
     };
   }
 
-  const branches = await Branch.find({ restaurent: new ObjectId(rId) }).select(
-    select
-  );
+  if (manager) {
+    const branches = await Branch.find({
+      restaurent: new ObjectId(rId),
+      deleted: false,
+    })
+      .select(select)
+      .populate("manager", ["fullName", "avatar", "email"]);
+
+    return res.send({ branches });
+  }
+
+  const branches = await Branch.find({
+    restaurent: new ObjectId(rId),
+    deleted: false,
+  }).select(select);
 
   res.send({ branches });
 };

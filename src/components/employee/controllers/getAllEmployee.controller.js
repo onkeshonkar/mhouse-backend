@@ -32,8 +32,18 @@ module.exports = async (req, res, next) => {
   const employees = await Employee.find({
     branch: new ObjectId(branchId),
   })
+    .select({
+      visa: 0,
+      tenure: 0,
+      workSlot: 0,
+      emergencyContact: 0,
+      sickCertificates: 0,
+      badges: 0,
+      resume: 0,
+    })
     .populate("payrollGroup", ["name"])
-    .populate("user", ["fullName", "roles", "email"]);
+    .populate("user", ["fullName", "type", "roles", "email", "phoneNumber"])
+    .populate("branch", ["name"]);
 
   res.json({ employees });
 };

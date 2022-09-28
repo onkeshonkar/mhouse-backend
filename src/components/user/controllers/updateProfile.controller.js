@@ -41,11 +41,18 @@ module.exports = async (req, res, next) => {
       email,
     },
     { new: true }
-  );
+  ).populate({
+    path: "branch",
+    select: { deleted: 0, departments: 0, jobTitles: 0, roles: 0 },
+    populate: {
+      path: "restaurent",
+      select: { deleted: 0 },
+    },
+  });
 
   if (!user) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "User doesn't exists");
   }
 
-  res.status(httpStatus.NO_CONTENT).send();
+  res.json({ user });
 };

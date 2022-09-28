@@ -22,7 +22,11 @@ module.exports = async (req, res, next) => {
   const { branchId, empId } = req.params;
 
   const emp = await Employee.findById(empId)
-    .populate("user", ["fullName", "dateOfBirth", "avatar"])
+    .populate("payrollGroup", ["name"])
+    .populate({
+      path: "user",
+      select: { password: 0, pin: 0 },
+    })
     .populate("branch", ["name"]);
 
   if (

@@ -33,10 +33,6 @@ module.exports = async (req, res, next) => {
   const user = await User.findOne({ email }).populate({
     path: "branch",
     select: { deleted: 0, departments: 0, jobTitles: 0, roles: 0 },
-    populate: {
-      path: "restaurent",
-      select: { deleted: 0 },
-    },
   });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
