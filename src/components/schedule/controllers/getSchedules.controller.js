@@ -20,13 +20,27 @@ module.exports = async (req, res, next) => {
     query: Joi.object({
       date: Joi.date().required(),
       type: Joi.string().valid("week", "day").required(),
+      employee: Joi.string().custom(customValidators.objectId),
     }),
   };
 
   validateSchema(req, schema);
 
   const { branchId } = req.params;
-  const { date, type } = req.query;
+  const { date, type, employee } = req.query;
+
+  const weekStartDate = dayjs(date).day(1).toDate();
+  const weekEndDate = dayjs(weekStartDate).add(6, "days").toDate();
+
+  // send week schedule data for the employee
+
+  if (employee) {
+    const schedules = await Schedule.find({
+      employee,
+      scheduledDate: { $gte: weekStartDate, $lte: weekEndDate },
+    });
+    return res.json({ schedules });
+  }
 
   if (!canAccess(req.user, "SCHEDULE_SHIFT", "view")) {
     throw new ApiError(
@@ -34,10 +48,6 @@ module.exports = async (req, res, next) => {
       "You are not allowed to access this resource"
     );
   }
-
-  const weekStartDate = dayjs(date).day(0).toDate();
-  const weekEndDate = dayjs(date).day(6).toDate();
-
   const allEmployee = await Employee.find(
     { branch: branchId },
     "department jobTitle workSlot"
@@ -47,11 +57,12 @@ module.exports = async (req, res, next) => {
       select: ["fullName", "email", "avatar"],
     })
     .lean();
-  // lean return POJO(Plain Old Java Object) not the instance of
-  // Mongoose queries return an instance of the Mongoose Document class.
-  // Documents are much heavier than vanilla JavaScript objects,
 
   if (type === "week") {
+    // lean return POJO(Plain Old Java Object) not the instance of
+    // Mongoose queries return an instance of the Mongoose Document class.
+    // Documents are much heavier than vanilla JavaScript objects,
+
     const pipelineQuery = [
       {
         $match: {
@@ -85,26 +96,50 @@ module.exports = async (req, res, next) => {
       const employee = { ...emp, id: emp._id };
       delete employee._id;
       return {
-        employee,
-        weekData: scheduleForEmp ? scheduleForEmp.weekData : [],
+        ...employee,
+        schedules: scheduleForEmp ? scheduleForEmp.weekData : [],
       };
     });
 
-    return res.json({ schedules });
+    return res.json({ employees: schedules });
   }
+
+  // schedule list for single day of all employee
 
   const _schedules = await Schedule.find({
     branch: branchId,
     scheduledDate: date,
-  }).populate({
-    path: "employee",
-    select: ["department", "jobTitle", "workSlot", "user"],
-    populate: {
-      path: "user",
-      model: "User",
-      select: ["fullName", "email", "avatar"],
-    },
+  }).lean();
+
+  const employees = allEmployee.map((emp) => {
+    const foundSchedule = _schedules.find(
+      (sch) => sch.employee.toString() === emp._id.toString()
+    );
+    console.log(_schedules);
+    const employee = { ...emp, id: emp._id };
+    delete employee._id;
+    return {
+      ...employee,
+      schedule: foundSchedule || null,
+    };
   });
 
-  return res.json({ schedules: _schedules });
+  // _schedules.map((sch) => {
+  //   const employee = {
+  //     id: sch.employee._id.toString(),
+  //     user: sch.employee.user,
+  //     department: sch.employee.department,
+  //     jobTitle: sch.employee.jobTitle,
+  //     workSlot: sch.employee.workSlot,
+  //   };
+  //   delete sch.employee;
+  //   employee.schedule = sch;
+  //   employee.schedule.id = employee.schedule._id.toString();
+  //   delete employee.schedule._id;
+
+  //   employees.push(employee);
+  // });
+  // console.log(employees);
+
+  return res.json({ employees });
 };

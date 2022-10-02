@@ -34,15 +34,23 @@ module.exports = async (req, res, next) => {
   })
     .select({
       visa: 0,
-      tenure: 0,
       workSlot: 0,
       emergencyContact: 0,
       sickCertificates: 0,
+      experience: 0,
       badges: 0,
       resume: 0,
     })
     .populate("payrollGroup", ["name"])
-    .populate("user", ["fullName", "type", "roles", "email", "phoneNumber"])
+    .populate("user", [
+      "fullName",
+      "type",
+      "roles",
+      "email",
+      "phoneNumber",
+      "avatar",
+      "dateOfBirth",
+    ])
     .populate("branch", ["name"]);
 
   res.json({ employees });

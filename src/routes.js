@@ -36,7 +36,6 @@ router.use(
   "/branches/:branchId/payroll-groups",
   isAuth,
   isInSameRestaurent,
-  isOwnerOrManager,
   payrollGroupRoutes
 );
 

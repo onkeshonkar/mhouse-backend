@@ -33,7 +33,7 @@ module.exports = async (req, res, next) => {
     }
   });
 
-  console.log(logo);
+  // console.log(logo);
 
   if (avatar && avatar.mimetype.split("/")[0] !== "image") {
     throw new ApiError(

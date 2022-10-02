@@ -24,11 +24,11 @@ const emergencyContactSchema = mongoose.Schema(
 
 const experienceSchema = mongoose.Schema(
   {
-    logo: { type: String, default: "" },
-    companyName: { type: String, required: true },
-    department: { type: String, required: true },
-    jobTitle: { type: String, required: true },
-    startDate: { type: Date, required: true },
+    logo: { type: String },
+    companyName: { type: String },
+    department: { type: String },
+    jobTitle: { type: String },
+    startDate: { type: Date },
     endDate: { type: Date },
   },
   { _id: false }
@@ -101,8 +101,8 @@ const employeeSchema = mongoose.Schema(
       required: true,
     },
     workSlot: [[String, String]],
-    sickLeave: leavesSchema,
-    annualLeave: leavesSchema,
+    sickLeave: { type: leavesSchema, default: () => ({}) },
+    annualLeave: { type: leavesSchema, default: () => ({}) },
     emergencyContact: { type: emergencyContactSchema, required: true },
     experience: experienceSchema,
     resume: String,

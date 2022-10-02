@@ -88,7 +88,6 @@ module.exports = async (req, res, next) => {
   const {
     fullName,
     dateOfBirth,
-    avatar,
     email,
     phoneNumber,
     branch,
@@ -103,7 +102,6 @@ module.exports = async (req, res, next) => {
     workSlot,
     emergencyContact,
     experience,
-    resumeUrl,
   } = req.body;
 
   if (!canAccess(req.user, "WORKFORCE", "add")) {
@@ -133,7 +131,6 @@ module.exports = async (req, res, next) => {
         {
           fullName,
           dateOfBirth,
-          avatar,
           email,
           phoneNumber,
           branch,
@@ -159,7 +156,6 @@ module.exports = async (req, res, next) => {
           workSlot,
           emergencyContact,
           experience,
-          resumeUrl,
           branch,
         },
       ],
@@ -173,11 +169,12 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    if (error?.keyValue?.email)
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        `EMAIL ${error?.keyValue?.email} is already registered!`
+      );
 
-    throw new ApiError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      `Duplicate entry ${JSON.stringify(error.keyValue)}`,
-      error
-    );
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, error);
   }
 };
