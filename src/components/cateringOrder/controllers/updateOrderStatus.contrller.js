@@ -1,6 +1,5 @@
 const httpStatus = require("http-status");
 const Joi = require("joi");
-
 const mongoose = require("mongoose");
 
 require("express-async-errors");
@@ -10,9 +9,9 @@ const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
-const StocktakeOrder = require("../../../models/StocktakeOrder.model");
-const Supplier = require("../../../models/Suppliers.model");
-const Stocktake = require("../../../models/Stocktake.model");
+const CateringOrder = require("../../../models/CateringOrder.model");
+const Menu = require("../../../models/Menu.model");
+const Stocktake = require("../../../models/Stocktakes.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -27,56 +26,58 @@ module.exports = async (req, res, next) => {
 
   validateSchema(req, schema);
 
-  if (
-    !canAccess(req.user, "SUPPLIER", "edit") ||
-    !canAccess(req.user, "SUPPLIER", "add")
-  ) {
+  if (!canAccess(req.user, "CATERING_ORDERS", "edit")) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "You are not allowed to access this resource"
     );
   }
 
-  const { orderId } = req.params;
+  const { branchId, orderId } = req.params;
   const { status } = req.body;
 
   const session = await mongoose.startSession();
   session.startTransaction();
 
-  try {
-    const order = await StocktakeOrder.findOneAndUpdate(
-      { _id: orderId, status: "Open" },
-      { status, updatedBy: req.user.id },
-      { new: true, session }
-    );
+  //  update order status Delivered/Canceled
+  //  update sellCount in menu if status is Delivered
+  //  update stocktake quantity
 
-    const bulkQuery = [];
+  try {
+    const order = await CateringOrder.findOneAndUpdate(
+      { _id: orderId, status: "Open" },
+      { status: "Delivered", updatedBy: req.user.id },
+      {
+        new: true,
+        session,
+      }
+    ).populate("cart.menu", "rawItems");
+
+    let stocktakeBulkQuery = [];
+    let menuBulkQuery = [];
 
     if (order && order.status === "Delivered") {
-      order.orderItems.map((orderItem) => {
-        let query = {
+      order.cart.map((menuItem) => {
+        menuBulkQuery.push({
           updateOne: {
-            filter: { item: orderItem.item },
-            update: {
-              $inc: { currentStock: orderItem.quantity },
-              "lastBuy.quantity": orderItem.quantity,
-              "lastBuy.date": Date.now(),
-            },
+            filter: { _id: menuItem.menu.id },
+            update: { $inc: { sellCount: menuItem.quantity } },
           },
-        };
+        });
 
-        bulkQuery.push(query);
+        menuItem.menu.rawItems.forEach((stocktackItem) => {
+          let stockQuery = {
+            updateOne: {
+              filter: { _id: stocktackItem.stocktake },
+              update: { $inc: { currentStock: -stocktackItem.quantity } },
+            },
+          };
+          stocktakeBulkQuery.push(stockQuery);
+        });
       });
 
-      await Stocktake.bulkWrite(bulkQuery, { session });
-
-      await Supplier.findByIdAndUpdate(
-        order.supplier,
-        {
-          $inc: { purchaseCount: 1, purchaseValue: order.orderValue },
-        },
-        { session }
-      );
+      await Stocktake.bulkWrite(stocktakeBulkQuery, { session });
+      await Menu.bulkWrite(menuBulkQuery, { session });
     }
 
     await session.commitTransaction();
@@ -84,6 +85,7 @@ module.exports = async (req, res, next) => {
 
     res.send({ order });
   } catch (error) {
+    console.log(error);
     await session.abortTransaction();
     session.endSession();
     throw new ApiError(

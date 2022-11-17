@@ -10,7 +10,7 @@ const announceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    mediaUrl: {
+    mediaURL: {
       type: String,
       required: true,
       default: "",

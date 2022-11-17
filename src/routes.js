@@ -10,6 +10,10 @@ const scheduleRoutes = require("./components/schedule/schedule.routes");
 const taskRoutes = require("./components/task/task.routes");
 const BudgetRoutes = require("./components/budget/budget.routes");
 const userRoutes = require("./components/user/user.routes");
+const supplierRoutes = require("./components/supplier/supplier.routes");
+const stocktakeRoutes = require("./components/stocktake/stocktake.routes");
+const cateringOrderRoutes = require("./components/cateringOrder/cateringOrder.routes");
+const menuRoutes = require("./components/menu/menu.routes");
 
 const uploadRoutes = require("./components/uploads/uploads.routes");
 
@@ -65,6 +69,29 @@ router.use(
   isAuth,
   BudgetRoutes
 );
+
+router.use(
+  "/branches/:branchId/suppliers",
+  isInSameRestaurent,
+  isAuth,
+  supplierRoutes
+);
+
+router.use(
+  "/branches/:branchId/stocktakes",
+  isInSameRestaurent,
+  isAuth,
+  stocktakeRoutes
+);
+
+router.use(
+  "/branches/:branchId/catering-orders",
+  isInSameRestaurent,
+  isAuth,
+  cateringOrderRoutes
+);
+
+router.use("/branches/:branchId/menu", isInSameRestaurent, isAuth, menuRoutes);
 
 router.use("/uploads", isAuth, multer.any(), uploadRoutes);
 
