@@ -11,7 +11,7 @@ const canAccess = require("../../../utils/canAccess");
 
 const CateringOrder = require("../../../models/CateringOrder.model");
 const Menu = require("../../../models/Menu.model");
-const Stocktake = require("../../../models/Stocktakes.model");
+const Stocktake = require("../../../models/Stocktake.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -38,10 +38,6 @@ module.exports = async (req, res, next) => {
 
   const session = await mongoose.startSession();
   session.startTransaction();
-
-  //  update order status Delivered/Canceled
-  //  update sellCount in menu if status is Delivered
-  //  update stocktake quantity
 
   try {
     const order = await CateringOrder.findOneAndUpdate(

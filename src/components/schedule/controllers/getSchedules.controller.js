@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const Joi = require("joi");
 require("express-async-errors");
 const dayjs = require("dayjs");
+const { ObjectId } = require("mongoose").Types;
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
@@ -48,6 +49,7 @@ module.exports = async (req, res, next) => {
       "You are not allowed to access this resource"
     );
   }
+
   const allEmployee = await Employee.find(
     { branch: branchId },
     "department jobTitle workSlot"
@@ -67,7 +69,7 @@ module.exports = async (req, res, next) => {
       {
         $match: {
           scheduledDate: { $gte: weekStartDate, $lte: weekEndDate },
-          branch: branchId,
+          branch: ObjectId(branchId),
         },
       },
       {
@@ -115,7 +117,6 @@ module.exports = async (req, res, next) => {
     const foundSchedule = _schedules.find(
       (sch) => sch.employee.toString() === emp._id.toString()
     );
-    console.log(_schedules);
     const employee = { ...emp, id: emp._id };
     delete employee._id;
     return {
