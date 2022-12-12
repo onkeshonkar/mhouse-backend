@@ -1,6 +1,6 @@
 const httpStatus = require("http-status");
 const Joi = require("joi");
-
+const { objectId } = require("mongoose").Types;
 require("express-async-errors");
 
 const ApiError = require("../../../utils/ApiError");
@@ -29,7 +29,12 @@ module.exports = async (req, res, next) => {
     );
   }
 
-  const orders = await StocktakeOrder.find({ supplier: supplierId });
+  const orders = await StocktakeOrder.find({
+    supplier: Object(supplierId),
+  })
+    .populate("createdBy", ["fullName", "avatar", "email"])
+    .populate("updatedBy", ["fullName", "avatar", "email"])
+    .sort({ createdAt: -1 });
 
   res.send({ orders });
 };

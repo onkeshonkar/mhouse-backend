@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
         .required(),
       minOrderValue: Joi.number().min(0).integer().required(),
       deliveryFee: Joi.number().min(0).required(),
-      deliveryInstruction: Joi.string(),
+      deliveryInstruction: Joi.string().required(),
     }),
   };
 

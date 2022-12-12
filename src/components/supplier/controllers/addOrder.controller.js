@@ -15,8 +15,8 @@ module.exports = async (req, res, next) => {
     stocktakeId: Joi.string().custom(customValidators.objectId).required(),
     item: Joi.string().required(),
     unit: Joi.string().required(),
-    quantity: Joi.number().min(0).required(),
-    price: Joi.number().min(0).required(),
+    quantity: Joi.number().min(1).required(),
+    price: Joi.number().min(1).required(),
   });
 
   const schema = {

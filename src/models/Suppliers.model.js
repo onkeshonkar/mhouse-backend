@@ -62,6 +62,7 @@ const supplierSchema = mongoose.Schema(
     deliveryInstruction: {
       type: String,
       default: "",
+      required: true,
     },
     branch: {
       type: ObjectId,

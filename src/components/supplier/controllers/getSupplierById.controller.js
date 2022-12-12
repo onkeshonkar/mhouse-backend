@@ -27,7 +27,7 @@ module.exports = async (req, res, next) => {
   }
   const { branchId, supplierId } = req.params;
 
-  const supplier = await Supplier.findOne({ supplier: supplierId });
+  const supplier = await Supplier.findById(supplierId);
 
   res.send({ supplier });
 };

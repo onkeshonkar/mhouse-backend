@@ -79,7 +79,7 @@ const stocktakeOrderSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-toJSON(stocktakeOrderSchema);
+toJSON(stocktakeOrderSchema, false);
 
 const StocktakeOrder = mongoose.model("StocktakeOrder", stocktakeOrderSchema);
 

@@ -1,5 +1,6 @@
 const httpStatus = require("http-status");
 const Joi = require("joi");
+const { ObjectId } = require("mongoose").Types;
 
 require("express-async-errors");
 
@@ -38,7 +39,9 @@ module.exports = async (req, res, next) => {
     });
     return res.send({ stocktake });
   }
-  const stocktake = await Stocktake.find({ branch: branchId });
+  const stocktakes = await Stocktake.find({ branch: ObjectId(branchId) }).sort({
+    createdAt: -1,
+  });
 
-  res.send({ stocktake });
+  res.send({ stocktakes });
 };
