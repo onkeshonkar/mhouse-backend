@@ -27,10 +27,9 @@ module.exports = async (req, res, next) => {
     );
   }
 
-  const safeDeposits = await SafeDeposit.find({ brannch: branchId }).populate(
-    "registeredBy",
-    ["fullName", "avatar"]
-  );
+  const safeDeposits = await SafeDeposit.find({ brannch: branchId })
+    .populate("registeredBy", ["fullName", "avatar"])
+    .sort({ createdAt: -1 });
 
   res.json({ safeDeposits });
 };

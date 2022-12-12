@@ -28,7 +28,6 @@ module.exports = async (req, res, next) => {
       "50$": Joi.number().required(),
       "100$": Joi.number().required(),
       comment: Joi.string().required(),
-      totalAmount: Joi.number().required(),
     }),
   };
 
@@ -56,7 +55,6 @@ module.exports = async (req, res, next) => {
     "50$": $50,
     "100$": $100,
     comment,
-    totalAmount,
   } = req.body;
 
   const _totlaAmount =
@@ -71,6 +69,10 @@ module.exports = async (req, res, next) => {
     20 * $20 +
     50 * $50 +
     100 * $100;
+
+  if (_totlaAmount <= 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Incorrect notes/coins count");
+  }
 
   await SafeDeposit.create({
     "5C": cent5,

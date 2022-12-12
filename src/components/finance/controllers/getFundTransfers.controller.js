@@ -28,7 +28,9 @@ module.exports = async (req, res, next) => {
 
   const fundTransfers = await FundTransfer.find({
     branch: branchId,
-  }).populate("depositor", ["fullName", "avatar"]);
+  })
+    .populate("depositor", ["fullName", "avatar"])
+    .sort({ createdAt: -1 });
 
   res.json({ fundTransfers });
 };

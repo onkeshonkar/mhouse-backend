@@ -13,7 +13,7 @@ const fundTransferSchema = mongoose.Schema(
     },
     method: {
       type: String,
-      enum: ["CASH_ON_HAND", "BANK_DEPOSIT"],
+      enum: ["Cash on Hand", "Bank Deposit"],
       required: true,
     },
     amount: {

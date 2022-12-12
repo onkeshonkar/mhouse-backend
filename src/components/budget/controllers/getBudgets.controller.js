@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const Joi = require("joi");
 require("express-async-errors");
 const dayjs = require("dayjs");
+const { ObjectId } = require("mongoose").Types;
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
@@ -36,7 +37,7 @@ module.exports = async (req, res, next) => {
   const weekEndDate = dayjs(date).day(6).toDate();
 
   const budgets = await Budget.find({
-    branch: branchId,
+    branch: ObjectId(branchId),
     budgetDate: { $gte: weekStartDate, $lte: weekEndDate },
   });
 

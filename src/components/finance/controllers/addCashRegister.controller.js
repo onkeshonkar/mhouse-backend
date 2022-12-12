@@ -16,21 +16,20 @@ module.exports = async (req, res, next) => {
     }),
 
     body: Joi.object({
-      "5C": Joi.number().required(),
-      "10C": Joi.number().required(),
-      "20C": Joi.number().required(),
-      "50C": Joi.number().required(),
-      "1$": Joi.number().required(),
-      "2$": Joi.number().required(),
-      "5$": Joi.number().required(),
-      "10$": Joi.number().required(),
-      "20$": Joi.number().required(),
-      "50$": Joi.number().required(),
-      "100$": Joi.number().required(),
+      "5C": Joi.number().default(0).required(),
+      "10C": Joi.number().default(0).required(),
+      "20C": Joi.number().default(0).required(),
+      "50C": Joi.number().default(0).required(),
+      "1$": Joi.number().default(0).required(),
+      "2$": Joi.number().default(0).required(),
+      "5$": Joi.number().default(0).required(),
+      "10$": Joi.number().default(0).required(),
+      "20$": Joi.number().default(0).required(),
+      "50$": Joi.number().default(0).required(),
+      "100$": Joi.number().default(0).required(),
       time: Joi.string()
         .valid("Breakfast", "Lunch", "Dinner", "Night")
         .required(),
-      totalAmount: Joi.number().required(),
     }),
   };
 
@@ -58,7 +57,6 @@ module.exports = async (req, res, next) => {
     "50$": $50,
     "100$": $100,
     time,
-    totalAmount,
   } = req.body;
 
   const _totlaAmount =
@@ -73,6 +71,10 @@ module.exports = async (req, res, next) => {
     20 * $20 +
     50 * $50 +
     100 * $100;
+
+  if (_totlaAmount <= 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Incorrect notes/coins count");
+  }
 
   await CashRegister.create({
     "5C": cent5,

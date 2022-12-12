@@ -31,7 +31,8 @@ module.exports = async (req, res, next) => {
     .find({
       branch: branchId,
     })
-    .populate("registeredBy", ["fullName", "avatar"]);
+    .populate("registeredBy", ["fullName", "avatar"])
+    .sort({ createdAt: -1 });
 
   res.json({ closings });
 };

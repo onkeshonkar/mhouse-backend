@@ -15,8 +15,8 @@ module.exports = async (req, res, next) => {
     }),
 
     body: Joi.object({
-      method: Joi.string().valid("CASH_ON_HAND", "BANK_DEPOSIT").required(),
-      amount: Joi.number().required(),
+      method: Joi.string().valid("Cash on Hand", "Bank Deposit").required(),
+      amount: Joi.number().min(1).required(),
       commnet: Joi.string(),
     }),
   };

@@ -16,8 +16,16 @@ module.exports = async (req, res, next) => {
     }),
 
     body: Joi.object({
-      transactionCount: Joi.number().required(),
-      totalIncome: Joi.number().required(),
+      cash: Joi.number().min(1).required(),
+      eftpos: Joi.number().min(0).required(),
+      deliveroo: Joi.number().min(0).required(),
+      uber: Joi.number().min(0).required(),
+      menulog: Joi.number().min(0).required(),
+      doorDash: Joi.number().min(0).required(),
+      orderUp: Joi.number().min(0).required(),
+      pos: Joi.number().min(0).required(),
+      transactionCount: Joi.number().min(1).required(),
+      totalIncome: Joi.number().min(1).required(),
       note: Joi.string(),
     }),
   };
@@ -25,7 +33,19 @@ module.exports = async (req, res, next) => {
   validateSchema(req, schema);
 
   const { branchId } = req.params;
-  const { transactionCount, totalIncome, note } = req.body;
+  const {
+    transactionCount,
+    totalIncome,
+    note,
+    cash,
+    eftpos,
+    deliveroo,
+    uber,
+    menulog,
+    doorDash,
+    orderUp,
+    pos,
+  } = req.body;
 
   if (!canAccess(req.user, "CLOSING_DAY", "add")) {
     throw new ApiError(
@@ -35,6 +55,14 @@ module.exports = async (req, res, next) => {
   }
 
   await closingDay.create({
+    cash,
+    eftpos,
+    deliveroo,
+    uber,
+    menulog,
+    doorDash,
+    orderUp,
+    pos,
     transactionCount,
     totalIncome,
     note,
