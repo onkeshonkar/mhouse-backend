@@ -30,7 +30,7 @@ module.exports = async (req, res, next) => {
 
   const { branchId } = req.params;
 
-  const menu = await Menu.find({ branch: branchId });
+  const menu = await Menu.find({ branch: branchId }).sort({ createdAt: -1 });
 
   const totalSoldDish = await Menu.aggregate([
     {

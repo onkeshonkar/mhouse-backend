@@ -13,8 +13,8 @@ const Menu = require("../../../models/Menu.model");
 module.exports = async (req, res, next) => {
   const rawItemSchema = Joi.object({
     stocktake: Joi.string().custom(customValidators.objectId).required(),
-    quantity: Joi.number().min(0).required(),
-    price: Joi.number().min(0).required(),
+    quantity: Joi.number().min(0.1).required(),
+    price: Joi.number().min(0.1).required(),
   });
 
   const schema = {
@@ -24,15 +24,17 @@ module.exports = async (req, res, next) => {
 
     body: Joi.object({
       dish: Joi.string().trim().required(),
-      picture: Joi.string().trim().uri().required(),
+      picture: Joi.string()
+        .trim()
+        .uri()
+        .default(
+          "https://images.unsplash.com/photo-1587334207810-4915c4e40c67?auto=format&fit=crop&w=200&q=80"
+        ),
       category: Joi.string().trim().required(),
       season: Joi.string().trim().required(),
-      prepareTime: Joi.number().min(0).required(),
-      sellPrice: Joi.number().min(0).required(),
-      nutriScore: Joi.string()
-        .valid("A", "B", "C", "D", "E")
-        .default("A")
-        .required(),
+      prepareTime: Joi.number().min(1).required(),
+      sellPrice: Joi.number().min(1).required(),
+      nutriScore: Joi.string().valid("A", "B", "C", "D", "E").default("A"),
       rawItems: Joi.array().items(rawItemSchema).required(),
     }),
   };
