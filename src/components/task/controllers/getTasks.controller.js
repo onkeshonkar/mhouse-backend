@@ -22,10 +22,9 @@ module.exports = async (req, res, next) => {
   const { branchId } = req.params;
   // const { limitSize, skipSize } = req.params;
 
-  const tasks = await Task.find({ branch: branchId }).populate("completedBy", [
-    "fullName",
-    "email",
-  ]);
+  const tasks = await Task.find({ branch: branchId })
+    .populate("completedBy", ["fullName", "email"])
+    .sort({ createdAt: -1 });
 
   res.send({ tasks });
 };
