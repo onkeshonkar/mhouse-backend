@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
     body: Joi.object({
       title: Joi.string().required(),
       comment: Joi.string(),
-      checkList: Joi.array().items(checklistSchema),
+      checkList: Joi.array().items(checklistSchema).min(1).required(),
       departments: Joi.array().items(Joi.string()).required().min(1),
       repeateType: Joi.string().valid("Daily", "Weekly", "Monthly"),
       weeklyDueDay: Joi.alternatives().conditional("repeateType", {
