@@ -37,7 +37,7 @@ module.exports = async (req, res, next) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Task is already in progress.");
   }
 
-  if (!task.checkList) {
+  if (!task.checkList.length) {
     task.status = "completed";
     task.completedBy = req.user.id;
     await task.save();
@@ -48,7 +48,10 @@ module.exports = async (req, res, next) => {
   let completedAllTasks = true;
   let subTaskFound = false;
   task.checkList.map((subtask) => {
-    if (!subtask.completed) completedAllTasks = false;
+    //  make completedAllTasks only is subtask is not completed excepted the requested one
+    if (!subtask.completed && subtask._id.toString() !== subTaskId) {
+      completedAllTasks = false;
+    }
 
     if (subtask._id.toString() === subTaskId) {
       subTaskFound = true;
