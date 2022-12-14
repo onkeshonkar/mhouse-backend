@@ -3,12 +3,14 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 require("express-async-errors");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
+const { ObjectId } = require("mongoose").Types;
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 
 const User = require("../../../models/User.model");
+const Employee = require("../../../models/Employee.model");
 
 const emailService = require("../../../services/email.service");
 const tokenService = require("../../../services/token.service");
@@ -54,5 +56,19 @@ module.exports = async (req, res, next) => {
   // rate limiter login here
 
   const authToken = tokenService.generateAuthToken(user.id);
-  res.json({ user, authToken });
+
+  const employee = await Employee.findOne({
+    user: ObjectId(user.id),
+  }).select({
+    department: 1,
+  });
+
+  res.json({
+    user: {
+      ...user.toJSON(),
+      employeeId: employee.id,
+      department: employee.department,
+    },
+    authToken,
+  });
 };

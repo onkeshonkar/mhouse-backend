@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 require("express-async-errors");
 const Joi = require("joi");
 const dayjs = require("dayjs");
+const { ObjectId } = require("mongoose").Types;
 
 const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
@@ -11,6 +12,7 @@ const Otp = require("../../../models/Otp.model");
 const User = require("../../../models/User.model");
 
 const tokenService = require("../../../services/token.service");
+const Employee = require("../../../models/Employee.model");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -52,5 +54,18 @@ module.exports = async (req, res, next) => {
 
   const authToken = tokenService.generateAuthToken(user.id);
 
-  res.json({ user, authToken });
+  const employee = await Employee.findOne({
+    user: ObjectId(user.id),
+  }).select({
+    department: 1,
+  });
+
+  res.json({
+    user: {
+      ...user.toJSON(),
+      employeeId: employee.id,
+      department: employee.department,
+    },
+    authToken,
+  });
 };
