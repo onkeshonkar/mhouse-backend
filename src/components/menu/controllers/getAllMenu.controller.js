@@ -17,6 +17,9 @@ module.exports = async (req, res, next) => {
     params: Joi.object({
       branchId: Joi.string().custom(customValidators.objectId).required(),
     }),
+    query: Joi.object({
+      meta: Joi.boolean(),
+    }),
   };
 
   validateSchema(req, schema);
@@ -29,6 +32,15 @@ module.exports = async (req, res, next) => {
   }
 
   const { branchId } = req.params;
+  const { meta } = req.query;
+
+  if (meta !== undefined && !meta) {
+    const menu = await Menu.find({ branch: branchId }).select({
+      dish: 1,
+      sellPrice: 1,
+    });
+    return res.send({ menu });
+  }
 
   const menu = await Menu.find({ branch: branchId }).sort({ createdAt: -1 });
 

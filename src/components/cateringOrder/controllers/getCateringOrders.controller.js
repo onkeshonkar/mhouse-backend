@@ -45,7 +45,10 @@ module.exports = async (req, res, next) => {
 
   const cateringOrders = await CateringOrder.find({
     branch: branchId,
-  });
+  })
+    .populate("createdBy", ["fullName", "avatar"])
+    .populate("updatedBy", ["fullName", "avatar"])
+    .sort({ createdAt: -1 });
 
   res.send({ cateringOrders });
 };

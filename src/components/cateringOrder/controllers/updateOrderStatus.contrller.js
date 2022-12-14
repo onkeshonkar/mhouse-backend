@@ -42,7 +42,7 @@ module.exports = async (req, res, next) => {
   try {
     const order = await CateringOrder.findOneAndUpdate(
       { _id: orderId, status: "Open" },
-      { status: "Delivered", updatedBy: req.user.id },
+      { status, updatedBy: req.user.id },
       {
         new: true,
         session,

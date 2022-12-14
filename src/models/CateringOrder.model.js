@@ -19,6 +19,10 @@ const cartItemSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    sellPrice: {
+      type: Number,
+      required: true,
+    },
   },
   { _id: false }
 );
