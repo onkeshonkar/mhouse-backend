@@ -47,17 +47,17 @@ const taskSchema = mongoose.Schema(
       required: false,
     },
     createdBy: {
-      type: Object,
+      type: ObjectId,
       ref: "User",
       required: true,
     },
     completedBy: {
-      type: Object,
+      type: ObjectId,
       ref: "User",
       default: null,
     },
     branch: {
-      type: Object,
+      type: ObjectId,
       ref: "Branch",
       required: true,
     },
