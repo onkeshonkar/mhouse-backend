@@ -35,7 +35,6 @@ module.exports = async (req, res, next) => {
     })
       .populate("completedBy", ["fullName", "email"])
       .sort({ createdAt: -1 });
-    console.log("hi");
 
     return res.send({ tasks });
   }

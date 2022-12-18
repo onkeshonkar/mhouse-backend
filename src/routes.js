@@ -26,73 +26,72 @@ const router = express.Router();
 
 router.use("/user/auth", authRoutes);
 
-router.use(
-  "/branches/:branchId",
-  isAuth,
-  isInSameRestaurent,
-  isOwnerOrManager,
-  branchRoutes
-);
-
-router.use("/restaurents/:rId", isAuth, restaurentRoutes);
+router.use("/restaurents/:rId", restaurentRoutes);
 
 router.use(
   "/branches/:branchId/payroll-groups",
-  isAuth,
+
   isInSameRestaurent,
   payrollGroupRoutes
 );
 
 router.use(
   "/branches/:branchId/employees",
-  isAuth,
+
   isInSameRestaurent,
   employeeRoutes
 );
 
-router.use("/user", isAuth, userRoutes);
+router.use("/user", userRoutes);
 
-router.use("/branches/:branchId/", isInSameRestaurent, isAuth, financeRoutes);
+router.use("/branches/:branchId/", isInSameRestaurent, financeRoutes);
 
 router.use(
   "/branches/:branchId/schedules",
   isInSameRestaurent,
-  isAuth,
+
   scheduleRoutes
 );
 
-router.use("/branches/:branchId/tasks", isInSameRestaurent, isAuth, taskRoutes);
+router.use("/branches/:branchId/tasks", isInSameRestaurent, taskRoutes);
 
 router.use(
   "/branches/:branchId/budgets",
   isInSameRestaurent,
-  isAuth,
+
   BudgetRoutes
 );
 
 router.use(
   "/branches/:branchId/suppliers",
   isInSameRestaurent,
-  isAuth,
+
   supplierRoutes
 );
 
 router.use(
   "/branches/:branchId/stocktakes",
   isInSameRestaurent,
-  isAuth,
+
   stocktakeRoutes
 );
 
 router.use(
   "/branches/:branchId/catering-orders",
   isInSameRestaurent,
-  isAuth,
+
   cateringOrderRoutes
 );
 
-router.use("/branches/:branchId/menu", isInSameRestaurent, isAuth, menuRoutes);
+router.use("/branches/:branchId/menu", isInSameRestaurent, menuRoutes);
 
-router.use("/uploads", isAuth, multer.any(), uploadRoutes);
+router.use("/uploads", multer.any(), uploadRoutes);
+
+router.use(
+  "/branches/:branchId",
+  isInSameRestaurent,
+  isOwnerOrManager,
+  branchRoutes
+);
 
 module.exports = router;

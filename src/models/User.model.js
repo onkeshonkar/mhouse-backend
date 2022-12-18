@@ -71,7 +71,7 @@ const userSchema = mongoose.Schema(
     pin: String,
     type: {
       type: String,
-      enum: ["OWNER", "MANAGER"],
+      enum: ["OWNER", "MANAGER", "STAFF"],
     },
     roles: {
       type: rolesSchema,

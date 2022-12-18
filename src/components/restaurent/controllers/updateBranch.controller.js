@@ -38,7 +38,7 @@ module.exports = async (req, res, next) => {
   const oldManager = await User.findById(branch.manager);
 
   if (oldManager.type !== "OWNER") {
-    oldManager.type = undefined;
+    oldManager.type = "STAFF";
     await oldManager.save();
   }
   // update  role 'Manager from roles.role

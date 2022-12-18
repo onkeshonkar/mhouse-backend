@@ -134,6 +134,7 @@ module.exports = async (req, res, next) => {
           email,
           phoneNumber,
           branch,
+          type: "STAFF",
         },
       ],
       { session }

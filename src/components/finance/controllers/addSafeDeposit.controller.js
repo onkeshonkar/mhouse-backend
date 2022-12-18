@@ -27,7 +27,7 @@ module.exports = async (req, res, next) => {
       "20$": Joi.number().required(),
       "50$": Joi.number().required(),
       "100$": Joi.number().required(),
-      comment: Joi.string().required(),
+      comment: Joi.string(),
     }),
   };
 

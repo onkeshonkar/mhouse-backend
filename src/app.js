@@ -11,6 +11,7 @@ const ApiError = require("./utils/ApiError");
 
 const { errorConverter, errorHandler } = require("./middlewares/errors");
 const routes = require("./routes");
+const isAuth = require("./middlewares/isAuth");
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use(mongoSanitize());
 app.use(cors());
 app.use(compression());
 
-app.use("/api/v1", routes);
+app.use("/api/v1", isAuth, routes);
 
 app.use("/ping", (req, res, next) => {
   res.send("pong");

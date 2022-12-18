@@ -35,7 +35,7 @@ module.exports = async (req, res, next) => {
       prepareTime: Joi.number().min(1).required(),
       sellPrice: Joi.number().min(1).required(),
       nutriScore: Joi.string().valid("A", "B", "C", "D", "E").default("A"),
-      rawItems: Joi.array().items(rawItemSchema).required(),
+      rawItems: Joi.array().items(rawItemSchema).min(1).required(),
     }),
   };
 

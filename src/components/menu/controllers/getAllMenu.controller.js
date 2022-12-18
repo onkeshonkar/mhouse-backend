@@ -59,5 +59,5 @@ module.exports = async (req, res, next) => {
     },
   ]);
 
-  res.send({ menu, totalSoldDish: totalSoldDish[0].total });
+  res.send({ menu, totalSoldDish: totalSoldDish[0]?.total });
 };

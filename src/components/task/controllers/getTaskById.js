@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
     }),
   };
 
-  //   validateSchema(req, schema);
+  validateSchema(req, schema);
 
   const { branchId, taskId } = req.params;
   // const { limitSize, skipSize } = req.params;

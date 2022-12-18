@@ -4,7 +4,7 @@ const canAccess = (user, resource, accessType) => {
   resource = resource.toUpperCase();
   accessType = accessType.toLowerCase();
 
-  if (user.roles && user.roles.access.resource.includes(accessType))
+  if (user.roles && user.roles.access[resource].includes(accessType))
     return true;
 
   return false;

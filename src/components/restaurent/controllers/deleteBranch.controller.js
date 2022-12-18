@@ -27,7 +27,7 @@ module.exports = async (req, res, next) => {
   const _user = await User.findById(branch.manager);
 
   if (_user.type !== "OWNER") {
-    _user.type = undefined;
+    _user.type = "STAFF";
     await _user.save();
   }
 

@@ -57,17 +57,23 @@ module.exports = async (req, res, next) => {
 
   const authToken = tokenService.generateAuthToken(user.id);
 
-  const employee = await Employee.findOne({
-    user: ObjectId(user.id),
-  }).select({
-    department: 1,
-  });
+  let employee;
+
+  if (user.type === "OWNER") {
+    employee = await Employee.findOne({
+      user: ObjectId(user.id),
+    }).select({
+      department: 1,
+    });
+  }
 
   res.json({
     user: {
       ...user.toJSON(),
-      employeeId: employee.id,
-      department: employee.department,
+      ...(employee && {
+        employeeId: employee.id,
+        department: employee.department,
+      }),
     },
     authToken,
   });

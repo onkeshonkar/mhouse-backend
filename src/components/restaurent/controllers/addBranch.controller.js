@@ -43,7 +43,7 @@ module.exports = async (req, res, next) => {
     restaurent: rId,
   });
 
-  // Create a role 'Manager in in restaurent.roles and assign in roles.role
+  // Create a role 'Manager in restaurent.roles and assign in roles.role
 
   const _user = await User.findById(manager);
 

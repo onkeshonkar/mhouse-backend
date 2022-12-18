@@ -63,8 +63,10 @@ module.exports = async (req, res, next) => {
   res.json({
     user: {
       ...user.toJSON(),
-      employeeId: employee.id,
-      department: employee.department,
+      ...(employee && {
+        employeeId: employee.id,
+        department: employee.department,
+      }),
     },
     authToken,
   });

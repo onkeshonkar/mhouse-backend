@@ -16,17 +16,21 @@ const User = require("../../../models/User.model");
 module.exports = async (req, res, next) => {
   const accessSchema = Joi.object().pattern(
     Joi.string().valid(
-      "SAFE_DEPOSIT",
-      "STOCKTAKE",
-      "SUPPLIER",
-      "BUILD_CART",
-      "WORKFORCE",
       "TASKS",
-      "OPERATIONS",
+      "SUPPLIER",
+      "STOCKTAKE",
+      "BUILD_CART",
+      "CASH_REGISTER",
+      "CLOSING_DAY",
+      "SAFE_DEPOSIT",
+      "FUND_TRANSFER",
       "SCHEDULE_SHIFT",
+      "WORKFORCE",
       "CATERING_ORDERS",
+      "OPERATIONS",
       "MENU",
-      "NEWS_FEED"
+      "NEWS_FEED",
+      "SETTINGS"
     ),
     Joi.array().items("view", "edit", "add").unique().max(3)
   );
