@@ -30,7 +30,7 @@ app.use(mongoSanitize());
 app.use(cors());
 app.use(compression());
 
-app.use("/api/v1", isAuth, routes);
+app.use("/api/v1", routes);
 
 app.use("/ping", (req, res, next) => {
   res.send("pong");

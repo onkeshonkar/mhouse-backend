@@ -16,7 +16,7 @@ const isOwnerOrManager = async (req, res, next) => {
   ) {
     return next();
   }
-  throw new ApiError(httpStatus.FORBIDDEN);
+  throw new ApiError(httpStatus.FORBIDDEN, "Only Manager / Owner is allowed");
 };
 
 module.exports = isOwnerOrManager;

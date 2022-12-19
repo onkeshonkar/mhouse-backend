@@ -12,7 +12,6 @@ const announceSchema = mongoose.Schema(
     },
     mediaURL: {
       type: String,
-      required: true,
       default: "",
     },
     department: {
