@@ -57,9 +57,10 @@ module.exports = async (req, res, next) => {
 
   const authToken = tokenService.generateAuthToken(user.id);
 
+  // emp Id need to fetch roster department for fetching task
   let employee;
 
-  if (user.type === "OWNER") {
+  if (user.type !== "OWNER") {
     employee = await Employee.findOne({
       user: ObjectId(user.id),
     }).select({

@@ -65,11 +65,13 @@ module.exports = async (req, res, next) => {
       employee,
       branch: branchId,
     });
+
     if (scheduledSlot) {
       const totalWorkMinute = timeDifference(
         scheduledSlot[0],
         scheduledSlot[1]
       );
+
       await Budget.findOneAndUpdate(
         { branch: branchId, budgetDate: scheduledDate },
         { totalWorkMinute },

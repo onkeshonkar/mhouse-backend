@@ -9,6 +9,7 @@ const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
 const Stocktake = require("../../../models/Stocktake.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -46,6 +47,14 @@ module.exports = async (req, res, next) => {
     minStock,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Inventory",
+      message: `Stocktake ${stocktake.item} ${stocktake.id} is added`,
+    });
+  }
 
   res.status(httpStatus.CREATED).send({ stocktake });
 };

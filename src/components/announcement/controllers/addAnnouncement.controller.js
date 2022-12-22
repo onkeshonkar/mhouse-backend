@@ -44,7 +44,5 @@ module.exports = async (req, res, next) => {
     branch: branchId,
   });
 
-  //   publish to announcement channel
-
   res.status(httpStatus.CREATED).send();
 };

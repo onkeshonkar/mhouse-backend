@@ -8,6 +8,7 @@ const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
 const Employee = require("../../../models/Employee.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -28,7 +29,15 @@ module.exports = async (req, res, next) => {
     );
   }
 
-  await Employee.findByIdAndUpdate(empId, { deleted: true });
+  const emp = await Employee.findByIdAndUpdate(empId, { deleted: true });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Workforce",
+      message: `workforce is deleted ${emp.id}`,
+    });
+  }
 
   return res.status(httpStatus.NO_CONTENT).send();
 };

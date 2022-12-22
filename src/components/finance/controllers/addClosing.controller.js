@@ -8,6 +8,7 @@ const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
 const closingDay = require("../../../models/ClosingDay.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -54,7 +55,7 @@ module.exports = async (req, res, next) => {
     );
   }
 
-  await closingDay.create({
+  const closing = await closingDay.create({
     cash,
     eftpos,
     deliveroo,
@@ -69,6 +70,14 @@ module.exports = async (req, res, next) => {
     registeredBy: req.user.id,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Finance",
+      message: `New closing of amount $ ${totalIncome} is added ${closing.id}`,
+    });
+  }
 
   res.status(httpStatus.CREATED).send();
 };

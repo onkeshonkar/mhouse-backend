@@ -29,8 +29,7 @@ module.exports = async (req, res, next) => {
       "CATERING_ORDERS",
       "OPERATIONS",
       "MENU",
-      "NEWS_FEED",
-      "SETTINGS"
+      "NEWS_FEED"
     ),
     Joi.array().items("view", "edit", "add").unique().max(3)
   );

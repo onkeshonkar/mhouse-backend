@@ -9,6 +9,7 @@ const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
 const Stocktake = require("../../../models/Stocktake.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -30,6 +31,14 @@ module.exports = async (req, res, next) => {
   const { branchId, stocktakeId } = req.params;
 
   const stocktake = await Stocktake.findByIdAndRemove(stocktakeId);
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Inventory",
+      message: `Stocktake ${stocktake.item} ${stocktake.id} is deleted`,
+    });
+  }
 
   res.status(httpStatus.NO_CONTENT).send();
 };

@@ -6,12 +6,12 @@ const { ObjectId } = mongoose.Types;
 
 const notificationSchema = mongoose.Schema(
   {
-    triggerdBy: {
+    triggeredBy: {
       type: ObjectId,
       ref: "User",
       required: true,
     },
-    body: {
+    message: {
       type: String,
       required: true,
     },
@@ -23,26 +23,28 @@ const notificationSchema = mongoose.Schema(
         "Finance",
         "Schedule",
         "Workforce",
-        "Catering_orders",
+        "Catering",
         "Operations",
         "Menu",
       ],
     },
-    user: {
+    triggeredFor: {
       type: ObjectId,
       ref: "User",
       required: true,
     },
-    branch: {
-      type: ObjectId,
-      ref: "Branch",
+    isRead: {
+      type: Boolean,
+      default: false,
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: { createdAt: true, updatedAt: false },
+  }
 );
 
-toJSON(notificationSchema);
+toJSON(notificationSchema, false);
 
 const Notification = mongoose.model("Notification", notificationSchema);
 

@@ -7,6 +7,7 @@ const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
+const { notifyAdmins } = require("../../../socketIO");
 
 const StocktakeOrder = require("../../../models/StocktakeOrder.model");
 
@@ -58,6 +59,14 @@ module.exports = async (req, res, next) => {
     createdBy: req.user.id,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Inventory",
+      message: `New stocktake order is placed ${stocktakeOrder.id}`,
+    });
+  }
 
   res.status(httpStatus.CREATED).send({ stocktakeOrder });
 };

@@ -8,6 +8,7 @@ const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
 const SafeDeposit = require("../../../models/SafeDeposit.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -74,7 +75,7 @@ module.exports = async (req, res, next) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Incorrect notes/coins count");
   }
 
-  await SafeDeposit.create({
+  const safe = await SafeDeposit.create({
     "5C": cent5,
     "10C": cent10,
     "20C": cent20,
@@ -91,6 +92,14 @@ module.exports = async (req, res, next) => {
     registeredBy: req.user.id,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Finance",
+      message: `Amount $ ${_totlaAmount} is added in safe ${safe.id}`,
+    });
+  }
 
   res.status(httpStatus.CREATED).send();
 };

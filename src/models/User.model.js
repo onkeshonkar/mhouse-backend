@@ -20,7 +20,6 @@ const defaultAccess = {
   OPERATIONS: [],
   MENU: ["view"],
   NEWS_FEED: ["view"], // only view and add
-  SETTINGS: ["view"], // only view and edit
 };
 
 const rolesSchema = mongoose.Schema(

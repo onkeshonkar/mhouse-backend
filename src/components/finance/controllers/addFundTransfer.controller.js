@@ -7,6 +7,7 @@ const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 const FundTransfer = require("../../../models/FundTransfer.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -23,7 +24,7 @@ module.exports = async (req, res, next) => {
 
   validateSchema(req, schema);
 
-  if (!canAccess(req.user, " FUND_TRANSFER", "add")) {
+  if (!canAccess(req.user, "FUND_TRANSFER", "add")) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "You are not allowed to access this resource"
@@ -33,13 +34,21 @@ module.exports = async (req, res, next) => {
   const { branchId } = req.params;
 
   const { method, amount, commnet } = req.body;
-  await FundTransfer.create({
+  const transfer = await FundTransfer.create({
     method,
     amount,
     depositor: req.user.id,
     commnet,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Finance",
+      message: `New fund-transfer of amount $ ${amount} is added ${transfer.id}`,
+    });
+  }
 
   res.status(httpStatus.CREATED).send();
 };

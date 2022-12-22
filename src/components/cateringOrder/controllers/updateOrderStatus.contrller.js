@@ -12,6 +12,7 @@ const canAccess = require("../../../utils/canAccess");
 const CateringOrder = require("../../../models/CateringOrder.model");
 const Menu = require("../../../models/Menu.model");
 const Stocktake = require("../../../models/Stocktake.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const schema = {
@@ -78,6 +79,14 @@ module.exports = async (req, res, next) => {
 
     await session.commitTransaction();
     session.endSession();
+
+    if (req.user.type !== "OWNER") {
+      notifyAdmins({
+        user: req.user,
+        module: "Catering",
+        message: `Catering-order ${order.id} is ${status}`,
+      });
+    }
 
     res.send({ order });
   } catch (error) {

@@ -7,6 +7,7 @@ const ApiError = require("../../../utils/ApiError");
 const validateSchema = require("../../../utils/validateSchema");
 const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
+const { notifyAdmins } = require("../../../socketIO");
 
 const Supplier = require("../../../models/Suppliers.model");
 
@@ -72,6 +73,14 @@ module.exports = async (req, res, next) => {
     deliveryInstruction,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Inventory",
+      message: `New supplier is Added ${supplier.name} ${supplier.email} ${supplier.id}`,
+    });
+  }
 
   res.status(httpStatus.CREATED).send({ supplier });
 };

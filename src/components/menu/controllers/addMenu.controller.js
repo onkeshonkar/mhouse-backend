@@ -9,6 +9,7 @@ const customValidators = require("../../../utils/customValidator");
 const canAccess = require("../../../utils/canAccess");
 
 const Menu = require("../../../models/Menu.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const rawItemSchema = Joi.object({
@@ -77,6 +78,14 @@ module.exports = async (req, res, next) => {
     rawMaterialCost,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Menu",
+      message: `New menu is added ${menu.id}`,
+    });
+  }
 
   res.send({ menu });
 };

@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
 
   validateSchema(req, schema);
 
-  if (!canAccess(req.user, " FUND_TRANSFER", "view")) {
+  if (!canAccess(req.user, "FUND_TRANSFER", "view")) {
     throw new ApiError(
       httpStatus.FORBIDDEN,
       "You are not allowed to access this resource"

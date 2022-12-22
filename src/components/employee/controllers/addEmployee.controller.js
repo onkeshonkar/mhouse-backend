@@ -13,6 +13,7 @@ const canAccess = require("../../../utils/canAccess");
 const Employee = require("../../../models/Employee.model");
 const User = require("../../../models/User.model");
 const Restaurent = require("../../../models/Restaurent.model");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const visaSchema = Joi.object({
@@ -167,6 +168,14 @@ module.exports = async (req, res, next) => {
     session.endSession();
 
     // send invitation email to emp
+
+    if (req.user.type !== "OWNER") {
+      notifyAdmins({
+        user: req.user,
+        module: "Workforce",
+        message: `New workforce is added ${email}`,
+      });
+    }
 
     res.json({ employee: employee[0] });
   } catch (error) {

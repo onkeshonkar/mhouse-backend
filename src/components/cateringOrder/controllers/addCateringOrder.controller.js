@@ -9,6 +9,7 @@ const customValidators = require("../../../utils/customValidator");
 
 const CateringOrder = require("../../../models/CateringOrder.model");
 const canAccess = require("../../../utils/canAccess");
+const { notifyAdmins } = require("../../../socketIO");
 
 module.exports = async (req, res, next) => {
   const cartSchema = Joi.object({
@@ -80,6 +81,14 @@ module.exports = async (req, res, next) => {
     createdBy: req.user.id,
     branch: branchId,
   });
+
+  if (req.user.type !== "OWNER") {
+    notifyAdmins({
+      user: req.user,
+      module: "Catering",
+      message: `New catering-order of amount $ ${orderAmount} is added ${cateringOrder.id}`,
+    });
+  }
 
   res.send({ cateringOrder });
 };
