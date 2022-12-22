@@ -1,14 +1,29 @@
 const mongoose = require("mongoose");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 const app = require("./app");
 const config = require("./config");
 const logger = require("./utils/logger");
+const socketIO = require("./socketIO");
 
+let io;
 let server;
 
 mongoose.connect(config.db).then(() => {
   logger.info("Connected to MONGODB");
-  app.listen(config.port, () => {
+  const httpServer = createServer(app);
+  io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+    },
+  });
+
+  socketIO.initIO(io);
+  io.use(socketIO.authMiddleware);
+  io.on("connection", socketIO.onConnection);
+
+  server = httpServer.listen(config.port, () => {
     console.info(`Listening to http://127.0.0.1:${config.port}`);
   });
 });
