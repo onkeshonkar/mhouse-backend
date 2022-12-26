@@ -69,7 +69,10 @@ module.exports = async (req, res, next) => {
     }
   });
 
-  if (completedAllTasks) task.status = "completed";
+  if (completedAllTasks) {
+    task.status = "completed";
+    task.completedDate = dayjs().toDate();
+  }
 
   task.completedBy = req.user.id;
   await task.save();

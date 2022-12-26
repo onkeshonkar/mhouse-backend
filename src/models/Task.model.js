@@ -42,6 +42,10 @@ const taskSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    completedDate: {
+      type: Date,
+      required: false,
+    },
     createdBy: {
       type: Object,
       ref: "User",
