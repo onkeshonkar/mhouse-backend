@@ -36,7 +36,7 @@ const scheduleSchema = mongoose.Schema(
       default: false, // true means published and employee can see
     },
     branch: {
-      type: Object,
+      type: ObjectId,
       ref: "Branch",
       required: true,
     },
