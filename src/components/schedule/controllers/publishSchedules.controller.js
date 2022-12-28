@@ -53,7 +53,7 @@ module.exports = async (req, res, next) => {
     { new: true }
   );
 
-  // send email to all employee
+  // send email to all employee who is added to the roster
 
   res.send({ message: "Schedule published" });
 };

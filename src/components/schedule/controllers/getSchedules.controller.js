@@ -29,8 +29,8 @@ module.exports = async (req, res, next) => {
   const { branchId } = req.params;
   const { date, type, employee } = req.query;
 
-  const weekStartDate = dayjs(date).day(1).toDate();
-  const weekEndDate = dayjs(weekStartDate).add(6, "days").toDate();
+  const weekStartDate = dayjs(date).day(0).toDate();
+  const weekEndDate = dayjs(date).day(6).toDate();
 
   // send week schedule data for the employee
 
