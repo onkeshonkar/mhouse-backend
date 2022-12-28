@@ -34,7 +34,6 @@ module.exports = async (req, res, next) => {
   })
     .select({
       visa: 0,
-      workSlot: 0,
       emergencyContact: 0,
       sickCertificates: 0,
       experience: 0,

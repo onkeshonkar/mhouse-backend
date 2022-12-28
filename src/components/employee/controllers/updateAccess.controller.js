@@ -86,6 +86,8 @@ module.exports = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
+    // send access update email to emp
+
     res.status(httpStatus.NO_CONTENT).send();
   } catch (error) {
     await session.abortTransaction();

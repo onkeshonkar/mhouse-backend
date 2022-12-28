@@ -165,6 +165,8 @@ module.exports = async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
 
+    // send invitation email to emp
+
     res.json({ employee: employee[0] });
   } catch (error) {
     await session.abortTransaction();
