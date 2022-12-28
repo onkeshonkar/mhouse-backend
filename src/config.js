@@ -19,6 +19,12 @@ const config = {
 
   otp_expiry: process.env.OTP_EXPIRY_MINUTES || 15,
 
+  redis: {
+    host: process.env.REDIS_HOST || "0.0.0.0",
+    port: Number(process.env.REDIS_PORT) || 6379,
+    password: process.env.REDIS_PASSWORD || "",
+  },
+
   email: {
     smtp: {
       host: process.env.SMTP_HOST || "smtp-relay.sendinblue.com",

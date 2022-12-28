@@ -4,22 +4,21 @@ const helmet = require("helmet");
 const cors = require("cors");
 const mongoSanitize = require("express-mongo-sanitize");
 const httpStatus = require("http-status");
-// const pinoHttp = require("pino-http");
+const pinoHttp = require("pino-http");
 
 const logger = require("./utils/logger");
 const ApiError = require("./utils/ApiError");
 
 const { errorConverter, errorHandler } = require("./middlewares/errors");
 const routes = require("./routes");
-const isAuth = require("./middlewares/isAuth");
 
 const app = express();
 
-// app.use(
-//   pinoHttp({
-//     logger: logger,
-//   })
-// );
+app.use(
+  pinoHttp({
+    logger: logger,
+  })
+);
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
@@ -32,7 +31,7 @@ app.use(compression());
 
 app.use("/api/v1", routes);
 
-app.use("/ping", (req, res, next) => {
+app.use("/ping", (req, res) => {
   res.send("pong");
 });
 
