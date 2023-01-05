@@ -10,7 +10,7 @@ const socketIO = require("./socketIO");
 let io;
 let server;
 
-mongoose.connect(config.db).then(() => {
+mongoose.connect(config.db).then(async () => {
   logger.info("Connected to MONGODB");
   const httpServer = createServer(app);
   io = new Server(httpServer, {

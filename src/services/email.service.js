@@ -18,19 +18,20 @@ if (config.env !== "test") {
 
 const sendEmail = async (to, subject, text) => {
   const msg = { from: config.email.from, to, subject, text };
+
   await transport.sendMail(msg);
 };
 
 const sendResetPasswordEmail = async (user, token) => {
   const subject = "Reset password";
-  const resetPasswordUrl = `https://foodlert.com/reset-password?token=${token}`;
+  const resetPasswordUrl = `https://mhouse.com/reset-password?token=${token}`;
 
   const text = `Dear ${user.fullName},
-  To reset your password, click on this link: ${resetPasswordUrl}
+  To reset your password, click on this link: <a href=${resetPasswordUrl}>click here</a>
   If you didn't requested any password resets, then ignore this email.
  
   Regards
-  Foodlert Team`;
+  mhouse Team`;
 
   await sendEmail(user.email, subject, text);
 };
@@ -45,23 +46,23 @@ const sendOTPEmail = async (user, otp) => {
   Do not share your otp with anyone.
   
   Regards
-  Foodlert Team`;
+  mhouse Team`;
 
   await sendEmail(user.email, subject, text);
 };
 
 const sendInvitationEmail = async (user, token, restaurent) => {
-  const subject = "SignUp Invitation";
-  const resetPasswordUrl = `https://foodlert.com/signup-invitatio?token=${token}`;
+  const subject = "Sign-up Invitation";
+  const url = `https://mhouse.com/signup-invitation?token=${token}`;
 
-  const text = `Congrats ${user.fullName},
+  const text = `Congrats ${user.fullName} you are onboarded,
 
   Welcome, to <strong>${restaurent} family.
-  Create your password to Login ${resetPasswordUrl}.
+  Create your password to Login <a href=${url}>click here</a>.
   
  
   Regards
-  Foodlert Team`;
+  mhouse Team`;
 
   await sendEmail(user.email, subject, text);
 };

@@ -14,6 +14,8 @@ const Employee = require("../../../models/Employee.model");
 const User = require("../../../models/User.model");
 const Restaurent = require("../../../models/Restaurent.model");
 const { notifyAdmins } = require("../../../socketIO");
+const { sendInvitationEmail } = require("../../../services/email.service");
+const { generateInvitationToken } = require("../../../services/token.service");
 
 module.exports = async (req, res, next) => {
   const visaSchema = Joi.object({
@@ -125,6 +127,8 @@ module.exports = async (req, res, next) => {
     ).select({
       payrollId: 1,
       employeeId: 1,
+      businessName: 1,
+      venueName: 1,
     });
 
     const _user = await User.create(
@@ -168,6 +172,15 @@ module.exports = async (req, res, next) => {
     session.endSession();
 
     // send invitation email to emp
+    const invitationToken = await generateInvitationToken(employee);
+
+    sendInvitationEmail(
+      _user[0],
+      invitationToken,
+      _restaurent.businessName || _restaurent.venueName
+    ).then(() => {
+      console.log("email sent sucessfully.......................");
+    });
 
     if (req.user.type !== "OWNER") {
       notifyAdmins({

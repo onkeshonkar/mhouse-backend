@@ -36,7 +36,7 @@ module.exports = async (req, res, next) => {
       paymentMethod: Joi.string().valid("Cash", "Eftpos", "Credit").required(),
       upfrontPayment: Joi.number().min(0).required(),
       notes: Joi.string(),
-      cart: Joi.array().items(cartSchema).required(),
+      cart: Joi.array().items(cartSchema).min(1).required(),
     }),
   };
 

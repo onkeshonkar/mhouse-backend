@@ -95,7 +95,7 @@ const generateInvitationToken = async (user) => {
   };
 
   const token = jwt.sign(payload, config.jwt.secret, {
-    expiresIn: "10d",
+    expiresIn: "20d",
   });
 
   return token;
