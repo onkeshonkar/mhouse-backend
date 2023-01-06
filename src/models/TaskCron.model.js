@@ -26,14 +26,14 @@ const TaskCronSchema = mongoose.Schema(
     comment: String,
     checkList: [checklistSchema],
     departments: [String],
-    repeateType: {
+    repeatType: {
       type: String,
       enum: ["Daily", "Weekly", "Monthly"],
     },
     monthlyDueDate: Number,
     weeklyDueDay: {
       type: String,
-      enum: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+      enum: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     },
     createdBy: {
       type: Object,

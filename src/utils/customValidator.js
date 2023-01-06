@@ -22,10 +22,10 @@ const password = (value, helpers) => {
 };
 
 const phoneNumber = (value, helpers) => {
-  const phoneRegex = /^(\+61)\d{10}$/;
+  const phoneRegex = /^(\+91)\d{10}$/;
   if (!value.match(phoneRegex)) {
     return helpers.message(
-      "{{#label}} number must be of 10 digits with country code +61"
+      "{{#label}} number must be of 10 digits with country code +91"
     );
   }
   return value;

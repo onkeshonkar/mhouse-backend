@@ -6,6 +6,7 @@ const app = require("./app");
 const config = require("./config");
 const logger = require("./utils/logger");
 const socketIO = require("./socketIO");
+const { startAgenda } = require("./services/taskSchedule.service");
 
 let io;
 let server;
@@ -26,6 +27,8 @@ mongoose.connect(config.db).then(async () => {
   server = httpServer.listen(config.port, () => {
     console.info(`Listening to http://127.0.0.1:${config.port}`);
   });
+
+  startAgenda();
 });
 
 const exitHandler = () => {

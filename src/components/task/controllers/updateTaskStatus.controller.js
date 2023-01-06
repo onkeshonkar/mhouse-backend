@@ -33,7 +33,8 @@ module.exports = async (req, res, next) => {
     throw new ApiError(httpStatus.BAD_GATEWAY, "Task is expired");
   }
 
-  if (task.completedBy && task.completedBy !== req.user.id) {
+  console.log(task, req.user.id);
+  if (task.completedBy && task.completedBy.toString() !== req.user.id) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Task is already in progress.");
   }
 

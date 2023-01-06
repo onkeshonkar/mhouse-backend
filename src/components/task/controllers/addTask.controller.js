@@ -11,6 +11,7 @@ const canAccess = require("../../../utils/canAccess");
 
 const TaskCron = require("../../../models/TaskCron.model");
 const Task = require("../../../models/Task.model");
+const logger = require("../../../utils/logger");
 
 module.exports = async (req, res, next) => {
   const checklistSchema = Joi.object({
@@ -28,15 +29,15 @@ module.exports = async (req, res, next) => {
       comment: Joi.string(),
       checkList: Joi.array().items(checklistSchema).min(1).required(),
       departments: Joi.array().items(Joi.string()).required().min(1),
-      repeateType: Joi.string().valid("Daily", "Weekly", "Monthly"),
-      weeklyDueDay: Joi.alternatives().conditional("repeateType", {
+      repeatType: Joi.string().valid("Daily", "Weekly", "Monthly"),
+      weeklyDueDay: Joi.alternatives().conditional("repeatType", {
         is: "Weekly",
         then: Joi.string()
-          .valid("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
+          .valid("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
           .required(),
         otherwise: Joi.any().presence("forbidden"),
       }),
-      monthlyDueDate: Joi.alternatives().conditional("repeateType", {
+      monthlyDueDate: Joi.alternatives().conditional("repeatType", {
         is: "Monthly",
         then: Joi.number().min(1).max(28).required(),
         otherwise: Joi.any().presence("forbidden"),
@@ -53,7 +54,7 @@ module.exports = async (req, res, next) => {
     comment,
     checkList,
     departments,
-    repeateType,
+    repeatType,
     monthlyDueDate,
     weeklyDueDay,
   } = req.body;
@@ -69,7 +70,7 @@ module.exports = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    if (repeateType) {
+    if (repeatType) {
       await TaskCron.create(
         [
           {
@@ -77,7 +78,7 @@ module.exports = async (req, res, next) => {
             comment,
             checkList,
             departments,
-            repeateType,
+            repeatType,
             monthlyDueDate,
             weeklyDueDay,
             createdBy: req.user.id,
@@ -89,11 +90,11 @@ module.exports = async (req, res, next) => {
     }
 
     let dueDate;
-    if (!repeateType || repeateType === "Daily") {
+    if (!repeatType || repeatType === "Daily") {
       dueDate = dayjs().endOf("day").toDate();
-    } else if (repeateType === "Weekly") {
+    } else if (repeatType === "Weekly") {
       dueDate = dayjs().endOf("week").toDate();
-    } else if (repeateType === "Monthly") {
+    } else if (repeatType === "Monthly") {
       dueDate = dayjs().endOf("month").toDate();
     }
 
@@ -118,6 +119,8 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+
+    logger.error(error);
 
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
