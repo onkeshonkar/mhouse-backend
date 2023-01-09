@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    ports:
+      - "4000:4000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - NODE_ENV=production 
+
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    
+
